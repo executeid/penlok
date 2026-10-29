@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+
+WORKDIR /home/pi/penlock
+
+RUN pip install --no-cache-dir \
+    gpiozero \
+    lgpio \
+    opencv-contrib-python-headless \
+    pillow \
+    requests \
+    psutil \
+    numpy \
+    RPLCD \
+    smbus2 \
+    psycopg2-binary
+
+COPY edge_mas_controller.py migration_agent.py /home/pi/penlock/
+
+ENV PYTHONUNBUFFERED=1
+
+CMD ["python3", "edge_mas_controller.py", "--listen"]

@@ -1,0 +1,306 @@
+Multi Agent System
+
+1.​Edge Agent : Smart Box dan Monitroing Resource​
+- Hardware​
+- Telemetry ​
+- hasil monitoring CPU/RAM/Queue/latency/Throughput/ Bandwidth dll (dg berbagai
+skenario)
+Custom Script Testing shg mendekati kondisi real
+-​ Hasil : SS grafana dan prometheus, tabel telemetri setiap skenario (untuk dataset
+penelitian)
+-​ Contoh skenario: stress test kapan sistem mulai overload
+
+Edge Kubernetes
+Pod/service dapat berjalan dan dimonitor.
+Kubernetes berjalan di Edge
+
+Node status, Pod status
+
+Workload dapat dijalankan
+
+Pod/container berhasil
+
+2.​ Scheduler Agent : Machine Learning dg XGBoost (Klasfisikasi)
+​
+- Dataset : sumber, jumlah, jumlah variabel/fitur dan apa sj, jumlah label, format
+-​ Split data​
+- Praprocessing​
+- Model​
+- Hyperparemeter
+- Random seed
+- feature importance​
+- confusion matrix
+- Accuracy, precision, recall, f1-score​
+- grafik loss dan akurasi​
+- perubahan hyperparameter hingga menghasilkan model terbaik​
+- perbandingan dg model lainnya​
+- simulasi dg berbagai skenario​
+- threshold
+
+3.​ Migration Agent : Eksekusi Offloading (proses pengalihan beban)
+​
+- API​
+- transfer data​
+- migration time​
+- success rate
+Contoh Konfigurasi API
+A. Input
+Decision = 1
+B. API
+Misalnya:
+POST /migration
+C. Data yang dikirim
+Contoh:
+{
+"device_id": "SB01",
+"task_id": "TASK001",
+"timestamp": "...",
+"image": "...",
+"decision": 1
+}
+D. Response
+{
+"status": "success",
+"processing_node": "cloud"
+}
+
+N
+o
+
+Data
+Size
+
+Upload Time
+(ms)
+
+Processing
+Time (ms)
+
+Response
+Time (ms)
+
+Total Latency
+(ms)
+
+Statu
+s
+
+1
+
+500 KB
+
+148 352 82
+
+582 Succes
+s
+
+2
+
+500 KB
+
+155 347 79
+
+581 Succes
+s
+
+3
+
+500 KB
+
+162 360 85
+
+607 Succes
+s
+
+4
+
+500 KB
+
+...
+
+...
+
+...
+
+...
+
+100 500 KB
+
+...
+
+...
+
+...
+Failed
+
+Parameter Pengujian Migration Agent
+1.​ Data Size​
+Ukuran data yang dikirim dari Edge ke Cloud, misalnya 100 KB, 500 KB, atau 1 MB.
+2.​ Upload Time​
+Waktu yang dibutuhkan untuk mengirim data dari Edge ke Cloud.
+3.​ Processing Time​
+Waktu yang dibutuhkan Cloud untuk memproses data yang diterima.
+4.​ Download/Response Time​
+Waktu yang dibutuhkan untuk mengirim hasil pemrosesan dari Cloud kembali ke
+Edge.
+5.​ Total Latency​
+Total waktu sejak proses migrasi dimulai sampai hasil diterima Edge.​
+Total Latency = Upload Time + Processing Time + Response Time
+6.​ Success Rate​
+Persentase proses migrasi yang berhasil dari seluruh percobaan.​
+Success Rate = (Migrasi Berhasil / Total Percobaan) × 100%
+7.​ Failed Migration​
+Jumlah proses migrasi yang gagal, beserta penyebab kegagalannya, misalnya
+network timeout, server tidak tersedia, atau API error.
+
+4.​Cloud Agent : Menerima dan Memproses workload
+​
+- Arsitektur Server​
+- container​
+- endpoint​
+- database​
+- response
+Endpoint yang digunakan
+Request
+{
+"task_id": "001",
+"data": "..."
+}
+Response
+{
+"task_id": "001",
+"status": "success",
+"result": "..."
+}
+Database :
+●​ Database yang digunakan
+●​ Struktur tabel
+●​ Data yang disimpan
+●​ Contoh record
+●​ Query
+●​ Screenshot database
+
+Cloud Kubernetes
+Pod/service dapat dijalankan dan scaling/recovery diuji. Misal 10 request 1 pod
+dan 50 request 2 pod
+
+Pengujian Keseluruhan
+
+1.​ Integration Testing
+2.​ Stress test
+3.​ Fault Tolerance
+●​ Container mati
+●​ Network putus
+●​ Cloud service mati
+●​ Pod cloud mati (kubernetes)
+●​ Pengujian Fault Intolerance bertujuan untuk mengevaluasi ketahanan sistem terhadap
+kondisi kegagalan, baik pada sisi aplikasi, server, maupun jaringan. Dalam pengujian ini,
+dilakukan simulasi gangguan seperti mematikan salah satu container backend, memutus
+koneksi jaringan, atau menghentikan salah satu layanan load balancer secara tiba-tiba.
+Sistem diharapkan tetap dapat beroperasi dengan baik, meminimalisir downtime, dan
+mendistribusikan beban ke node yang masih aktif. Hasil pengujian fault intolerance akan
+menunjukkan seberapa handal sistem dalam menghadapi kegagalan dan memastikan
+adanya mekanisme failover yang efektif.
+4.​ Perbandingan : Edge Only, Rule-Based, XGBoost​
+Edge : semua proses di edge​
+Rule based : berdasarkan threshold atau aturan (perjelas aturannya)​
+XGBoost : Berdasarkan model Machine Learning​
+Kemudian ketiganya diuji dengan kondisi yang sama dan dibandingkan berdasarkan:
+●​ Latency
+●​ CPU usage
+●​ RAM usage
+●​ Throughput
+●​ Migration time
+●​ Success rate
+Contoh Rule based :
+IF CPU > 80% → Migration ke Cloud
+IF CPU ≤ 80% → Proses di Edge
+Atau
+IF CPU > 80%
+AND RAM > 70%
+AND Latency > 150 ms → Migration
+ELSE → Edge Processing
+-​
+
+Apakah keputusan XGBoost memang lebih baik daripada keputusan threshold
+sederhana?"
+
+-​
+
+"Bagaimana keputusan XGBoost memengaruhi performa orkestrasi
+Edge–Cloud yang berjalan di Kubernetes?"
+
+Integration Level
+1. End-to-End
+Smart Box → Edge → XGBoost → Migration → Cloud → Response berhasil.
+2. Performance
+Latency, CPU, RAM, throughput, migration time.
+3. Reliability
+Success rate, failure rate, recovery time.
+4. Comparative Experiment
+Edge-Only vs Rule-Based vs XGBoost.
+Script Testing untuk Custom pengujian
+
+Bukti implementasi :
+-​ Screenshoot terminal dan keterangan
+-​ Source code
+-​ Grafana
+-​ Postman/ API response
+-​ Hasil eksperimen : tabel data, foto dll
+-​ Grafik arsitektur
+-​ Info Spesifikasi Raspi
+Diskusi :
+-​ Perlu Kubernetes atau tidak? Kubernetes, scalling
+-​ Node Edge menggunakan Raspi di hardware/ Raspi baru ? Besi (face, keypad, relay)..
+-​ Butuh waktu berapa lama? Awal November (7 November)
+
+Checklist setiap agent
+Edge Agent
+●​ Hardware teridentifikasi
+●​ Smart Box berjalan
+●​ Container berjalan
+●​ CPU terbaca
+●​ RAM terbaca
+●​ Queue terbaca
+●​ Latency terbaca
+●​ Telemetry dikirim
+●​ Raw CSV tersedia
+●​ Grafana tersedia
+●​ JMeter berhasil menghasilkan beban
+Scheduler Agent
+●​ Dataset tersedia
+●​ Feature dijelaskan
+●​ Label dijelaskan
+●​ Dataset bersih
+●​ XGBoost/RF berhasil training
+●​ Model disimpan
+●​ Confusion matrix
+●​ Accuracy
+●​ Precision
+●​ Recall
+●​ F1-score
+●​ Feature importance
+●​ Inference berhasil
+●​ Decision dikirim ke Migration Agent
+Migration Agent
+●​ Menerima decision Scheduler
+●​ API tersedia
+●​ Data dapat dikirim
+●​ Cloud menerima data
+●​ Response diterima
+●​ Migration time tercatat
+●​ Success rate tercatat
+●​ Failure tercatat
+●​ Container berjalan
+Cloud Agent
+●​ Server aktif
+●​ Container aktif
+●​ Endpoint aktif
+●​ Request diterima
+●​ Processing berjalan
+●​ Database berjalan
+●​ Data tersimpan
+●​ Response dikirim kembali
+●​ Cloud processing time tercatat
+
+

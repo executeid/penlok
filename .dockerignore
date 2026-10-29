@@ -1,0 +1,11 @@
+software/
+coba/
+penlock/
+pyenv3.9code/
+manual_test/
+smartbox_web/
+*.zip
+*.pdf
+.git/
+__pycache__/
+*.pyc

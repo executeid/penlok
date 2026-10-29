@@ -1,0 +1,45 @@
+services:
+  edge-gateway-sync:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge-gateway-sync
+    image: penlock-edge-gateway-sync:latest
+    container_name: edge-gateway-sync
+    restart: unless-stopped
+    ports:
+      - "8600:8600"
+    devices:
+      - /dev/gpiochip15:/dev/gpiochip15
+    volumes:
+      - /home/pi/penlock:/home/pi/penlock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - DB_HOST=host.docker.internal
+      - DB_PORT=1723
+      - DB_USER=smartlocker_admin
+      - DB_PASSWORD=penlokjaya
+      - DB_NAME=smartlocker
+      - SYNC_SECRET=penlok-edge-sync-2026
+
+  edge-hardware-daemon:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge-hardware-daemon
+    image: penlock-edge-hardware-daemon:latest
+    container_name: edge-hardware-daemon
+    restart: unless-stopped
+    devices:
+      - /dev/gpiochip15:/dev/gpiochip15
+      - /dev/video0:/dev/video0
+    volumes:
+      - /home/pi/penlock:/home/pi/penlock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - SCHEDULER_URL=http://10.1.1.57:8500/api/v1/schedule
+      - CLOUD_GPU_URL=http://100.76.68.93:9000/api/v1/migration
+      - CLOUD_API_FALLBACK=http://10.1.1.186:9000/api/v1/migration
+      - LATENCY_CSV=/home/pi/penlock/data/migration_latency_log.csv

@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: smartbox-web-deployment
+  namespace: cloud-agent
+  labels:
+    app: smartbox-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: smartbox-web
+  template:
+    metadata:
+      labels:
+        app: smartbox-web
+    spec:
+      containers:
+        - name: smartbox-web
+          image: smartbox-web:v2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 80
+              name: http
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 80
+            initialDelaySeconds: 2
+            periodSeconds: 5
+          resources:
+            requests:
+              cpu: 50m
+              memory: 32Mi
+            limits:
+              cpu: 250m
+              memory: 128Mi

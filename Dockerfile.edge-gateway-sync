@@ -1,0 +1,21 @@
+FROM python:3.11-slim
+
+WORKDIR /home/pi/penlock
+
+RUN pip install --no-cache-dir \
+    fastapi \
+    uvicorn \
+    psycopg2-binary \
+    psutil \
+    lgpio \
+    opencv-contrib-python-headless \
+    pillow \
+    requests
+
+COPY edge_sync_service.py /home/pi/penlock/
+
+ENV PYTHONUNBUFFERED=1
+
+EXPOSE 8600
+
+CMD ["python3", "edge_sync_service.py"]
