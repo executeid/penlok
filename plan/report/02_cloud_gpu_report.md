@@ -1,5 +1,8 @@
 # Laporan Pelaksanaan Tahap 2: Cloud GPU Face Recognition Agent Service
 
+> Laporan historis. Audit cloud 29 Oktober 2026 tidak mengonfirmasi seluruh
+> angka/pernyataan selesai di bawah. Lihat [status cloud terverifikasi](../../cloud/PROGRESS.md).
+
 **Dokumen Rujukan**: `plan/02_cloud_gpu_agent.md`  
 **Target Node**: `penlok@10.1.1.186` / `100.76.68.93` (`pengmas-tri`)  
 **Port Layanan**: `9000` (FastAPI Cloud Agent)  

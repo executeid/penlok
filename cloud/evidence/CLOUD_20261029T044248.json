@@ -1,0 +1,293 @@
+{
+  "run_id": "CLOUD_20261029T044248",
+  "timestamp_utc": "2026-10-29T04:42:48.439964+00:00",
+  "scope": "cloud only; existing enrollment images; no accuracy claim",
+  "url": "http://127.0.0.1:31161",
+  "root": {
+    "http_status": 200,
+    "client_rtt_ms": 3.889,
+    "response": {
+      "service": "PENLOK Cloud GPU Deep Face Agent",
+      "version": "3.3.0",
+      "detection": "OpenCV YuNet ONNX",
+      "recognition": "InceptionResnetV1 (VGGFace2)",
+      "device": "cuda:0",
+      "profiles": 4,
+      "inference_only": true
+    }
+  },
+  "health": {
+    "http_status": 200,
+    "client_rtt_ms": 0.848,
+    "response": {
+      "status": "healthy",
+      "gpu_available": true,
+      "device": "cuda:0",
+      "models_ready": true,
+      "profiles": 4,
+      "version": "3.3.0"
+    }
+  },
+  "ready": {
+    "http_status": 200,
+    "client_rtt_ms": 9.631,
+    "response": {
+      "status": "ready",
+      "models_ready": true,
+      "postgres_available": true,
+      "last_audit_backend": "not_used"
+    }
+  },
+  "functional": [
+    {
+      "http_status": 200,
+      "client_rtt_ms": 231.552,
+      "response": {
+        "task_id": "CLOUD_20261029T044248_PROFILE_1",
+        "device_id": "cloud_verifier",
+        "status": "success",
+        "processing_node": "cloud",
+        "authorized": true,
+        "user_id": "Akmal",
+        "confidence": 0.9979,
+        "cloud_processing_time_ms": 213.36,
+        "queue_and_decode_time_ms": 0.96,
+        "server_total_time_ms": 227.71,
+        "audit_backend": "postgres"
+      },
+      "task_id": "CLOUD_20261029T044248_PROFILE_1",
+      "fixture_sha256": "35d3594dba9aef05b06ba3b3c8e09d57c56c5e1976fe1993da2b867b7283a495",
+      "fixture_bytes": 235043
+    },
+    {
+      "http_status": 200,
+      "client_rtt_ms": 31.809,
+      "response": {
+        "task_id": "CLOUD_20261029T044248_PROFILE_2",
+        "device_id": "cloud_verifier",
+        "status": "success",
+        "processing_node": "cloud",
+        "authorized": true,
+        "user_id": "Iqbal",
+        "confidence": 0.9746,
+        "cloud_processing_time_ms": 23.25,
+        "queue_and_decode_time_ms": 0.17,
+        "server_total_time_ms": 30.43,
+        "audit_backend": "postgres"
+      },
+      "task_id": "CLOUD_20261029T044248_PROFILE_2",
+      "fixture_sha256": "1da1f6dfd74dd7b28237fb43e1e463a62d82314e1844b6f32e02e34043a62570",
+      "fixture_bytes": 81249
+    },
+    {
+      "http_status": 200,
+      "client_rtt_ms": 30.776,
+      "response": {
+        "task_id": "CLOUD_20261029T044248_PROFILE_3",
+        "device_id": "cloud_verifier",
+        "status": "success",
+        "processing_node": "cloud",
+        "authorized": true,
+        "user_id": "Shafwan",
+        "confidence": 0.9968,
+        "cloud_processing_time_ms": 23.01,
+        "queue_and_decode_time_ms": 0.18,
+        "server_total_time_ms": 29.39,
+        "audit_backend": "postgres"
+      },
+      "task_id": "CLOUD_20261029T044248_PROFILE_3",
+      "fixture_sha256": "6ce03fb05fb9b4e6e07f94dc343455ed5a036105b8bb3b842256bd9998393cc7",
+      "fixture_bytes": 76445
+    },
+    {
+      "http_status": 200,
+      "client_rtt_ms": 30.32,
+      "response": {
+        "task_id": "CLOUD_20261029T044248_PROFILE_4",
+        "device_id": "cloud_verifier",
+        "status": "success",
+        "processing_node": "cloud",
+        "authorized": true,
+        "user_id": "Syauqi",
+        "confidence": 0.9519,
+        "cloud_processing_time_ms": 23.12,
+        "queue_and_decode_time_ms": 0.16,
+        "server_total_time_ms": 29.08,
+        "audit_backend": "postgres"
+      },
+      "task_id": "CLOUD_20261029T044248_PROFILE_4",
+      "fixture_sha256": "dc7136a7ecf873c28f9ace2ff7139c6cae55e63402f73aceb9fab28a7e67cfd5",
+      "fixture_bytes": 71954
+    }
+  ],
+  "batches": [
+    {
+      "concurrency": 10,
+      "requests": 10,
+      "duration_seconds": 0.783,
+      "completed_tps": 12.776,
+      "p50_client_rtt_ms": 445.045,
+      "p95_client_rtt_ms": 772.375,
+      "p99_client_rtt_ms": 772.375,
+      "statuses": {
+        "success": 10
+      },
+      "audit_backends": {
+        "postgres": 10
+      },
+      "http_statuses": {
+        "200": 10
+      }
+    },
+    {
+      "concurrency": 50,
+      "requests": 50,
+      "duration_seconds": 3.255,
+      "completed_tps": 15.361,
+      "p50_client_rtt_ms": 1575.53,
+      "p95_client_rtt_ms": 3064.834,
+      "p99_client_rtt_ms": 3210.388,
+      "statuses": {
+        "success": 50
+      },
+      "audit_backends": {
+        "postgres": 50
+      },
+      "http_statuses": {
+        "200": 50
+      }
+    }
+  ],
+  "no_face": {
+    "http_status": 200,
+    "client_rtt_ms": 9.514,
+    "response": {
+      "task_id": "CLOUD_20261029T044248_NO_FACE",
+      "device_id": "cloud_verifier",
+      "status": "unauthorized",
+      "processing_node": "cloud",
+      "authorized": false,
+      "user_id": "NO_FACE_DETECTED",
+      "confidence": 0.0,
+      "cloud_processing_time_ms": 2.62,
+      "queue_and_decode_time_ms": 0.03,
+      "server_total_time_ms": 8.2,
+      "audit_backend": "postgres"
+    },
+    "task_id": "CLOUD_20261029T044248_NO_FACE"
+  },
+  "invalid_image": {
+    "http_status": 400,
+    "client_rtt_ms": 6.784,
+    "response": {
+      "task_id": "CLOUD_20261029T044248_INVALID_IMAGE",
+      "device_id": "cloud_verifier",
+      "status": "error",
+      "processing_node": "cloud",
+      "authorized": false,
+      "user_id": null,
+      "confidence": 0.0,
+      "cloud_processing_time_ms": 0.0,
+      "queue_and_decode_time_ms": 0.05,
+      "server_total_time_ms": 5.67,
+      "audit_backend": "postgres",
+      "error": "Invalid image bytes"
+    },
+    "task_id": "CLOUD_20261029T044248_INVALID_IMAGE"
+  },
+  "invalid_base64": {
+    "http_status": 400,
+    "client_rtt_ms": 6.084,
+    "response": {
+      "task_id": "CLOUD_20261029T044248_BAD_BASE64",
+      "device_id": "cloud_verifier",
+      "status": "error",
+      "processing_node": "cloud",
+      "authorized": false,
+      "user_id": null,
+      "confidence": 0.0,
+      "cloud_processing_time_ms": 0.0,
+      "queue_and_decode_time_ms": 0.0,
+      "server_total_time_ms": 5.12,
+      "audit_backend": "postgres",
+      "error": "Invalid base64 image"
+    }
+  },
+  "invalid_schema": {
+    "http_status": 422,
+    "client_rtt_ms": 0.739,
+    "response": {
+      "detail": [
+        {
+          "type": "missing",
+          "loc": [
+            "body",
+            "task_id"
+          ],
+          "msg": "Field required",
+          "input": {
+            "data": "legacy dummy string"
+          }
+        },
+        {
+          "type": "missing",
+          "loc": [
+            "body",
+            "device_id"
+          ],
+          "msg": "Field required",
+          "input": {
+            "data": "legacy dummy string"
+          }
+        },
+        {
+          "type": "missing",
+          "loc": [
+            "body",
+            "image"
+          ],
+          "msg": "Field required",
+          "input": {
+            "data": "legacy dummy string"
+          }
+        }
+      ]
+    }
+  },
+  "alias_migrate": {
+    "http_status": 200,
+    "client_rtt_ms": 132.048,
+    "response": {
+      "task_id": "CLOUD_20261029T044248_ALIAS_MIGRATE",
+      "device_id": "cloud_verifier",
+      "status": "success",
+      "processing_node": "cloud",
+      "authorized": true,
+      "user_id": "Akmal",
+      "confidence": 0.9979,
+      "cloud_processing_time_ms": 121.8,
+      "queue_and_decode_time_ms": 0.45,
+      "server_total_time_ms": 128.3,
+      "audit_backend": "postgres"
+    },
+    "task_id": "CLOUD_20261029T044248_ALIAS_MIGRATE"
+  },
+  "alias_short": {
+    "http_status": 200,
+    "client_rtt_ms": 131.046,
+    "response": {
+      "task_id": "CLOUD_20261029T044248_ALIAS_SHORT",
+      "device_id": "cloud_verifier",
+      "status": "success",
+      "processing_node": "cloud",
+      "authorized": true,
+      "user_id": "Akmal",
+      "confidence": 0.9979,
+      "cloud_processing_time_ms": 122.42,
+      "queue_and_decode_time_ms": 0.45,
+      "server_total_time_ms": 129.55,
+      "audit_backend": "postgres"
+    },
+    "task_id": "CLOUD_20261029T044248_ALIAS_SHORT"
+  }
+}

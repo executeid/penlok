@@ -1,6 +1,12 @@
 # LAPORAN KEMAJUAN PROYEK (PROGRESS REPORT)
 # Penlok Smart Locker Multi-Agent System (MAS) & Web Interface v2
 
+> **Catatan verifikasi cloud (29 Oktober 2026):** dokumen ini adalah laporan
+> historis. Klaim kelengkapan, jumlah log, latency, dan scaling cloud di bawah
+> tidak seluruhnya cocok dengan bukti server saat audit. Gunakan
+> [Progress Cloud Agent terverifikasi](cloud/PROGRESS.md) untuk status cloud
+> terbaru dan batas pengujiannya. PDF lama belum diperbarui.
+
 **Tanggal Pembaruan**: 15 Oktober 2026  
 **Status Keseluruhan**: **98% Selesai (Platform Terkontainerisasi Penuh & Terverifikasi)**  
 **Target Deadline Data Evaluasi**: **7 November 2026**  

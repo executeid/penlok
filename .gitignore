@@ -1,0 +1,9 @@
+__pycache__/
+*.pyc
+/cloud/.env
+/cloud/evidence/private/
+/checkpoints/
+/gallery/
+/gallery_embeddings.pt
+/face_detection_yunet_2023mar.onnx
+/cloud_task_log.db

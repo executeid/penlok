@@ -1,0 +1,14 @@
+{
+  "old_pod": "cloud-api-6ddb97d874-nbxzz",
+  "old_uid": "8336b76c-4a26-426c-b3cf-75586ea40bf9",
+  "recovered": true,
+  "new_pod": "cloud-api-6ddb97d874-65pm9",
+  "new_uid": "e503b3af-f347-4f48-9e79-bf005b29307a",
+  "ready_response": {
+    "status": "ready",
+    "models_ready": true,
+    "postgres_available": true,
+    "last_audit_backend": "not_used"
+  },
+  "recovery_seconds": 8.102
+}

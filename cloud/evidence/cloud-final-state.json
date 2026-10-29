@@ -1,0 +1,838 @@
+{
+  "timestamp_utc": "2026-10-29T04:54:19.517259+00:00",
+  "node": {
+    "name": "pengmas-tri",
+    "conditions": [
+      {
+        "lastHeartbeatTime": "2026-10-29T04:51:14Z",
+        "lastTransitionTime": "2026-08-15T12:46:59Z",
+        "message": "kubelet has sufficient memory available",
+        "reason": "KubeletHasSufficientMemory",
+        "status": "False",
+        "type": "MemoryPressure"
+      },
+      {
+        "lastHeartbeatTime": "2026-10-29T04:51:14Z",
+        "lastTransitionTime": "2026-08-15T12:46:59Z",
+        "message": "kubelet has no disk pressure",
+        "reason": "KubeletHasNoDiskPressure",
+        "status": "False",
+        "type": "DiskPressure"
+      },
+      {
+        "lastHeartbeatTime": "2026-10-29T04:51:14Z",
+        "lastTransitionTime": "2026-08-15T12:46:59Z",
+        "message": "kubelet has sufficient PID available",
+        "reason": "KubeletHasSufficientPID",
+        "status": "False",
+        "type": "PIDPressure"
+      },
+      {
+        "lastHeartbeatTime": "2026-10-29T04:51:14Z",
+        "lastTransitionTime": "2026-10-08T16:51:42Z",
+        "message": "kubelet is posting ready status",
+        "reason": "KubeletReady",
+        "status": "True",
+        "type": "Ready"
+      }
+    ],
+    "allocatable": {
+      "cpu": "12",
+      "ephemeral-storage": "237302524333",
+      "hugepages-1Gi": "0",
+      "hugepages-2Mi": "0",
+      "memory": "16253824Ki",
+      "pods": "110"
+    }
+  },
+  "deployment": {
+    "name": "cloud-api",
+    "spec_replicas": 1,
+    "status": {
+      "availableReplicas": 1,
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-08-15T13:00:57Z",
+          "lastUpdateTime": "2026-10-29T04:49:24Z",
+          "message": "ReplicaSet \"cloud-api-6ddb97d874\" has successfully progressed.",
+          "reason": "NewReplicaSetAvailable",
+          "status": "True",
+          "type": "Progressing"
+        },
+        {
+          "lastTransitionTime": "2026-10-29T04:54:12Z",
+          "lastUpdateTime": "2026-10-29T04:54:12Z",
+          "message": "Deployment has minimum availability.",
+          "reason": "MinimumReplicasAvailable",
+          "status": "True",
+          "type": "Available"
+        }
+      ],
+      "observedGeneration": 5,
+      "readyReplicas": 1,
+      "replicas": 1,
+      "terminatingReplicas": 0,
+      "updatedReplicas": 1
+    },
+    "image": "penlok-cloud-agent:20261029-v2",
+    "resources": {
+      "limits": {
+        "cpu": "2",
+        "memory": "3Gi"
+      },
+      "requests": {
+        "cpu": "500m",
+        "memory": "1Gi"
+      }
+    }
+  },
+  "pods": [
+    {
+      "name": "cloud-api-6ddb97d874-65pm9",
+      "uid": "e503b3af-f347-4f48-9e79-bf005b29307a",
+      "status": {
+        "allocatedResources": {
+          "cpu": "500m",
+          "memory": "1Gi"
+        },
+        "conditions": [
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-10-29T04:54:07Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "PodReadyToStartContainers"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-10-29T04:54:07Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "Initialized"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-10-29T04:54:12Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "Ready"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-10-29T04:54:12Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "ContainersReady"
+          },
+          {
+            "lastProbeTime": null,
+            "lastTransitionTime": "2026-10-29T04:54:07Z",
+            "observedGeneration": 1,
+            "status": "True",
+            "type": "PodScheduled"
+          }
+        ],
+        "containerStatuses": [
+          {
+            "allocatedResources": {
+              "cpu": "500m",
+              "memory": "1Gi"
+            },
+            "containerID": "containerd://d96df25736f15bd96a64516d46b6d52cfca691c6371f133cbd7e9cec45a2dc5b",
+            "image": "docker.io/library/penlok-cloud-agent:20261029-v2",
+            "imageID": "sha256:2fccb4d1fa9673f70b982d92ac405c5a6814484b3b6ddd1b13521791de7317ff",
+            "lastState": {},
+            "name": "cloud-api",
+            "ready": true,
+            "resources": {
+              "limits": {
+                "cpu": "2",
+                "memory": "3Gi"
+              },
+              "requests": {
+                "cpu": "500m",
+                "memory": "1Gi"
+              }
+            },
+            "restartCount": 0,
+            "started": true,
+            "state": {
+              "running": {
+                "startedAt": "2026-10-29T04:54:08Z"
+              }
+            },
+            "user": {
+              "linux": {
+                "gid": 0,
+                "supplementalGroups": [
+                  0
+                ],
+                "uid": 0
+              }
+            },
+            "volumeMounts": [
+              {
+                "mountPath": "/models",
+                "name": "models",
+                "readOnly": true,
+                "recursiveReadOnly": "Disabled"
+              },
+              {
+                "mountPath": "/root/.cache/torch",
+                "name": "torch-cache",
+                "readOnly": true,
+                "recursiveReadOnly": "Disabled"
+              },
+              {
+                "mountPath": "/audit",
+                "name": "audit"
+              },
+              {
+                "mountPath": "/var/run/secrets/kubernetes.io/serviceaccount",
+                "name": "kube-api-access-8dk57",
+                "readOnly": true,
+                "recursiveReadOnly": "Disabled"
+              }
+            ]
+          }
+        ],
+        "hostIP": "10.1.1.186",
+        "hostIPs": [
+          {
+            "ip": "10.1.1.186"
+          }
+        ],
+        "observedGeneration": 1,
+        "phase": "Running",
+        "podIP": "10.42.0.47",
+        "podIPs": [
+          {
+            "ip": "10.42.0.47"
+          }
+        ],
+        "qosClass": "Burstable",
+        "resources": {
+          "limits": {
+            "cpu": "2",
+            "memory": "3Gi"
+          },
+          "requests": {
+            "cpu": "489m",
+            "memory": "1Gi"
+          }
+        },
+        "startTime": "2026-10-29T04:54:07Z"
+      }
+    }
+  ],
+  "services": [
+    {
+      "name": "cloud-api",
+      "ports": [
+        {
+          "name": "http",
+          "nodePort": 31161,
+          "port": 8000,
+          "protocol": "TCP",
+          "targetPort": 9000
+        }
+      ]
+    },
+    {
+      "name": "cloud-api-svc",
+      "ports": [
+        {
+          "name": "http",
+          "nodePort": 30900,
+          "port": 9000,
+          "protocol": "TCP",
+          "targetPort": 9000
+        }
+      ]
+    }
+  ],
+  "hpa": {
+    "spec": {
+      "behavior": {
+        "scaleDown": {
+          "policies": [
+            {
+              "periodSeconds": 15,
+              "type": "Pods",
+              "value": 1
+            }
+          ],
+          "selectPolicy": "Max",
+          "stabilizationWindowSeconds": 60
+        },
+        "scaleUp": {
+          "policies": [
+            {
+              "periodSeconds": 15,
+              "type": "Pods",
+              "value": 1
+            }
+          ],
+          "selectPolicy": "Max",
+          "stabilizationWindowSeconds": 0
+        }
+      },
+      "maxReplicas": 2,
+      "metrics": [
+        {
+          "resource": {
+            "name": "cpu",
+            "target": {
+              "averageUtilization": 70,
+              "type": "Utilization"
+            }
+          },
+          "type": "Resource"
+        }
+      ],
+      "minReplicas": 1,
+      "scaleTargetRef": {
+        "apiVersion": "apps/v1",
+        "kind": "Deployment",
+        "name": "cloud-api"
+      }
+    },
+    "status": {
+      "conditions": [
+        {
+          "lastTransitionTime": "2026-10-29T04:45:31Z",
+          "message": "the HPA controller was able to get the target's current scale",
+          "reason": "SucceededGetScale",
+          "status": "True",
+          "type": "AbleToScale"
+        },
+        {
+          "lastTransitionTime": "2026-10-29T04:54:16Z",
+          "message": "the HPA was unable to compute the replica count: failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API",
+          "reason": "FailedGetResourceMetric",
+          "status": "False",
+          "type": "ScalingActive"
+        },
+        {
+          "lastTransitionTime": "2026-10-29T04:52:16Z",
+          "message": "the desired replica count is less than the minimum replica count",
+          "reason": "TooFewReplicas",
+          "status": "True",
+          "type": "ScalingLimited"
+        }
+      ],
+      "currentMetrics": [
+        {
+          "type": ""
+        }
+      ],
+      "currentReplicas": 1,
+      "desiredReplicas": 1,
+      "lastScaleTime": "2026-10-29T04:52:16Z"
+    }
+  },
+  "events": [
+    {
+      "reason": "Killing",
+      "message": "Stopping container cloud-api",
+      "firstTimestamp": "2026-10-29T04:41:43Z",
+      "lastTimestamp": "2026-10-29T04:41:43Z",
+      "count": 1,
+      "object": "cloud-api-5779f5f77-bpxvz"
+    },
+    {
+      "reason": "SuccessfulDelete",
+      "message": "Deleted pod: cloud-api-5779f5f77-bpxvz",
+      "firstTimestamp": "2026-10-29T04:41:43Z",
+      "lastTimestamp": "2026-10-29T04:41:43Z",
+      "count": 1,
+      "object": "cloud-api-5779f5f77"
+    },
+    {
+      "reason": "Scheduled",
+      "message": "Successfully assigned cloud-agent/cloud-api-6ddb97d874-65pm9 to pengmas-tri",
+      "firstTimestamp": null,
+      "lastTimestamp": null,
+      "count": null,
+      "object": "cloud-api-6ddb97d874-65pm9"
+    },
+    {
+      "reason": "Pulled",
+      "message": "Container image \"penlok-cloud-agent:20261029-v2\" already present on machine and can be accessed by the pod",
+      "firstTimestamp": "2026-10-29T04:54:07Z",
+      "lastTimestamp": "2026-10-29T04:54:07Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-65pm9"
+    },
+    {
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-29T04:54:07Z",
+      "lastTimestamp": "2026-10-29T04:54:07Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-65pm9"
+    },
+    {
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-29T04:54:08Z",
+      "lastTimestamp": "2026-10-29T04:54:08Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-65pm9"
+    },
+    {
+      "reason": "Scheduled",
+      "message": "Successfully assigned cloud-agent/cloud-api-6ddb97d874-nbxzz to pengmas-tri",
+      "firstTimestamp": null,
+      "lastTimestamp": null,
+      "count": null,
+      "object": "cloud-api-6ddb97d874-nbxzz"
+    },
+    {
+      "reason": "Pulled",
+      "message": "Container image \"penlok-cloud-agent:20261029-v2\" already present on machine and can be accessed by the pod",
+      "firstTimestamp": "2026-10-29T04:49:14Z",
+      "lastTimestamp": "2026-10-29T04:49:14Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nbxzz"
+    },
+    {
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-29T04:49:14Z",
+      "lastTimestamp": "2026-10-29T04:49:14Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nbxzz"
+    },
+    {
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-29T04:49:14Z",
+      "lastTimestamp": "2026-10-29T04:49:14Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nbxzz"
+    },
+    {
+      "reason": "Unhealthy",
+      "message": "Startup probe failed: Get \"http://10.42.0.45:9000/health\": dial tcp 10.42.0.45:9000: connect: connection refused",
+      "firstTimestamp": "2026-10-29T04:49:18Z",
+      "lastTimestamp": "2026-10-29T04:49:18Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nbxzz"
+    },
+    {
+      "reason": "Killing",
+      "message": "Stopping container cloud-api",
+      "firstTimestamp": "2026-10-29T04:54:06Z",
+      "lastTimestamp": "2026-10-29T04:54:06Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nbxzz"
+    },
+    {
+      "reason": "Scheduled",
+      "message": "Successfully assigned cloud-agent/cloud-api-6ddb97d874-nldld to pengmas-tri",
+      "firstTimestamp": null,
+      "lastTimestamp": null,
+      "count": null,
+      "object": "cloud-api-6ddb97d874-nldld"
+    },
+    {
+      "reason": "Pulled",
+      "message": "Container image \"penlok-cloud-agent:20261029-v2\" already present on machine and can be accessed by the pod",
+      "firstTimestamp": "2026-10-29T04:50:51Z",
+      "lastTimestamp": "2026-10-29T04:50:51Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nldld"
+    },
+    {
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-29T04:50:51Z",
+      "lastTimestamp": "2026-10-29T04:50:51Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nldld"
+    },
+    {
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-29T04:50:51Z",
+      "lastTimestamp": "2026-10-29T04:50:51Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nldld"
+    },
+    {
+      "reason": "Unhealthy",
+      "message": "Startup probe failed: Get \"http://10.42.0.46:9000/health\": dial tcp 10.42.0.46:9000: connect: connection refused",
+      "firstTimestamp": "2026-10-29T04:50:51Z",
+      "lastTimestamp": "2026-10-29T04:50:51Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nldld"
+    },
+    {
+      "reason": "Killing",
+      "message": "Stopping container cloud-api",
+      "firstTimestamp": "2026-10-29T04:52:16Z",
+      "lastTimestamp": "2026-10-29T04:52:16Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874-nldld"
+    },
+    {
+      "reason": "SuccessfulCreate",
+      "message": "Created pod: cloud-api-6ddb97d874-nbxzz",
+      "firstTimestamp": "2026-10-29T04:49:13Z",
+      "lastTimestamp": "2026-10-29T04:49:13Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874"
+    },
+    {
+      "reason": "SuccessfulCreate",
+      "message": "Created pod: cloud-api-6ddb97d874-nldld",
+      "firstTimestamp": "2026-10-29T04:50:46Z",
+      "lastTimestamp": "2026-10-29T04:50:46Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874"
+    },
+    {
+      "reason": "SuccessfulDelete",
+      "message": "Deleted pod: cloud-api-6ddb97d874-nldld",
+      "firstTimestamp": "2026-10-29T04:52:16Z",
+      "lastTimestamp": "2026-10-29T04:52:16Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874"
+    },
+    {
+      "reason": "SuccessfulCreate",
+      "message": "Created pod: cloud-api-6ddb97d874-65pm9",
+      "firstTimestamp": "2026-10-29T04:54:07Z",
+      "lastTimestamp": "2026-10-29T04:54:07Z",
+      "count": 1,
+      "object": "cloud-api-6ddb97d874"
+    },
+    {
+      "reason": "Scheduled",
+      "message": "Successfully assigned cloud-agent/cloud-api-754f9b7c66-6t9g5 to pengmas-tri",
+      "firstTimestamp": null,
+      "lastTimestamp": null,
+      "count": null,
+      "object": "cloud-api-754f9b7c66-6t9g5"
+    },
+    {
+      "reason": "Pulled",
+      "message": "Container image \"penlok-cloud-agent:20261029-v1\" already present on machine and can be accessed by the pod",
+      "firstTimestamp": "2026-10-29T04:41:34Z",
+      "lastTimestamp": "2026-10-29T04:41:34Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-6t9g5"
+    },
+    {
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-29T04:41:34Z",
+      "lastTimestamp": "2026-10-29T04:41:34Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-6t9g5"
+    },
+    {
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-29T04:41:34Z",
+      "lastTimestamp": "2026-10-29T04:41:34Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-6t9g5"
+    },
+    {
+      "reason": "Unhealthy",
+      "message": "Startup probe failed: Get \"http://10.42.0.43:9000/health\": dial tcp 10.42.0.43:9000: connect: connection refused",
+      "firstTimestamp": "2026-10-29T04:41:38Z",
+      "lastTimestamp": "2026-10-29T04:41:38Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-6t9g5"
+    },
+    {
+      "reason": "Killing",
+      "message": "Stopping container cloud-api",
+      "firstTimestamp": "2026-10-29T04:43:59Z",
+      "lastTimestamp": "2026-10-29T04:43:59Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-6t9g5"
+    },
+    {
+      "reason": "Scheduled",
+      "message": "Successfully assigned cloud-agent/cloud-api-754f9b7c66-c26rb to pengmas-tri",
+      "firstTimestamp": null,
+      "lastTimestamp": null,
+      "count": null,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "Pulled",
+      "message": "Container image \"penlok-cloud-agent:20261029-v1\" already present on machine and can be accessed by the pod",
+      "firstTimestamp": "2026-10-29T04:44:00Z",
+      "lastTimestamp": "2026-10-29T04:46:25Z",
+      "count": 4,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "Created",
+      "message": "Container created",
+      "firstTimestamp": "2026-10-29T04:44:00Z",
+      "lastTimestamp": "2026-10-29T04:46:25Z",
+      "count": 4,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "Started",
+      "message": "Container started",
+      "firstTimestamp": "2026-10-29T04:44:01Z",
+      "lastTimestamp": "2026-10-29T04:46:25Z",
+      "count": 4,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "Unhealthy",
+      "message": "Startup probe failed: Get \"http://10.42.0.44:9000/health\": dial tcp 10.42.0.44:9000: connect: connection refused",
+      "firstTimestamp": "2026-10-29T04:45:25Z",
+      "lastTimestamp": "2026-10-29T04:45:50Z",
+      "count": 2,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "BackOff",
+      "message": "Back-off restarting failed container cloud-api in pod cloud-api-754f9b7c66-c26rb_cloud-agent(76d7ad22-a000-4345-8ed7-ee8a85621f99)",
+      "firstTimestamp": "2026-10-29T04:45:36Z",
+      "lastTimestamp": "2026-10-29T04:46:15Z",
+      "count": 6,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "Unhealthy",
+      "message": "Liveness probe failed: Get \"http://10.42.0.44:9000/health\": EOF",
+      "firstTimestamp": "2026-10-29T04:46:01Z",
+      "lastTimestamp": "2026-10-29T04:46:01Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "Killing",
+      "message": "Stopping container cloud-api",
+      "firstTimestamp": "2026-10-29T04:49:24Z",
+      "lastTimestamp": "2026-10-29T04:49:24Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66-c26rb"
+    },
+    {
+      "reason": "SuccessfulCreate",
+      "message": "Created pod: cloud-api-754f9b7c66-6t9g5",
+      "firstTimestamp": "2026-10-29T04:41:28Z",
+      "lastTimestamp": "2026-10-29T04:41:28Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66"
+    },
+    {
+      "reason": "SuccessfulCreate",
+      "message": "Created pod: cloud-api-754f9b7c66-c26rb",
+      "firstTimestamp": "2026-10-29T04:44:00Z",
+      "lastTimestamp": "2026-10-29T04:44:00Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66"
+    },
+    {
+      "reason": "SuccessfulDelete",
+      "message": "Deleted pod: cloud-api-754f9b7c66-c26rb",
+      "firstTimestamp": "2026-10-29T04:49:24Z",
+      "lastTimestamp": "2026-10-29T04:49:24Z",
+      "count": 1,
+      "object": "cloud-api-754f9b7c66"
+    },
+    {
+      "reason": "FailedGetResourceMetric",
+      "message": "failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API",
+      "firstTimestamp": "2026-10-29T04:45:31Z",
+      "lastTimestamp": "2026-10-29T04:54:16Z",
+      "count": 5,
+      "object": "cloud-api-hpa"
+    },
+    {
+      "reason": "FailedComputeMetricsReplicas",
+      "message": "invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: unable to get metrics for resource cpu: no metrics returned from resource metrics API",
+      "firstTimestamp": "2026-10-29T04:45:31Z",
+      "lastTimestamp": "2026-10-29T04:54:16Z",
+      "count": 5,
+      "object": "cloud-api-hpa"
+    },
+    {
+      "reason": "FailedGetResourceMetric",
+      "message": "failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)",
+      "firstTimestamp": "2026-10-29T04:46:01Z",
+      "lastTimestamp": "2026-10-29T04:49:46Z",
+      "count": 5,
+      "object": "cloud-api-hpa"
+    },
+    {
+      "reason": "FailedComputeMetricsReplicas",
+      "message": "invalid metrics (1 invalid out of 1), first error is: failed to get cpu resource metric value: failed to get cpu utilization: did not receive metrics for targeted pods (pods might be unready)",
+      "firstTimestamp": "2026-10-29T04:46:01Z",
+      "lastTimestamp": "2026-10-29T04:49:46Z",
+      "count": 5,
+      "object": "cloud-api-hpa"
+    },
+    {
+      "reason": "SuccessfulRescale",
+      "message": "New size: 2; reason: cpu resource utilization (percentage of request) above target",
+      "firstTimestamp": "2026-10-29T04:50:46Z",
+      "lastTimestamp": "2026-10-29T04:50:46Z",
+      "count": 1,
+      "object": "cloud-api-hpa"
+    },
+    {
+      "reason": "SuccessfulRescale",
+      "message": "New size: 1; reason: All metrics below target",
+      "firstTimestamp": "2026-10-29T04:52:16Z",
+      "lastTimestamp": "2026-10-29T04:52:16Z",
+      "count": 1,
+      "object": "cloud-api-hpa"
+    },
+    {
+      "reason": "ScalingReplicaSet",
+      "message": "Scaled up replica set cloud-api-754f9b7c66 from 0 to 1",
+      "firstTimestamp": "2026-10-29T04:41:28Z",
+      "lastTimestamp": "2026-10-29T04:41:28Z",
+      "count": 1,
+      "object": "cloud-api"
+    },
+    {
+      "reason": "ScalingReplicaSet",
+      "message": "Scaled down replica set cloud-api-5779f5f77 from 1 to 0",
+      "firstTimestamp": "2026-10-29T04:41:43Z",
+      "lastTimestamp": "2026-10-29T04:41:43Z",
+      "count": 1,
+      "object": "cloud-api"
+    },
+    {
+      "reason": "ScalingReplicaSet",
+      "message": "Scaled up replica set cloud-api-6ddb97d874 from 0 to 1",
+      "firstTimestamp": "2026-10-29T04:49:13Z",
+      "lastTimestamp": "2026-10-29T04:49:13Z",
+      "count": 1,
+      "object": "cloud-api"
+    },
+    {
+      "reason": "ScalingReplicaSet",
+      "message": "Scaled down replica set cloud-api-754f9b7c66 from 1 to 0",
+      "firstTimestamp": "2026-10-29T04:49:24Z",
+      "lastTimestamp": "2026-10-29T04:49:24Z",
+      "count": 1,
+      "object": "cloud-api"
+    },
+    {
+      "reason": "ScalingReplicaSet",
+      "message": "Scaled up replica set cloud-api-6ddb97d874 from 1 to 2",
+      "firstTimestamp": "2026-10-29T04:50:46Z",
+      "lastTimestamp": "2026-10-29T04:50:46Z",
+      "count": 1,
+      "object": "cloud-api"
+    },
+    {
+      "reason": "ScalingReplicaSet",
+      "message": "Scaled down replica set cloud-api-6ddb97d874 from 2 to 1",
+      "firstTimestamp": "2026-10-29T04:52:16Z",
+      "lastTimestamp": "2026-10-29T04:52:16Z",
+      "count": 1,
+      "object": "cloud-api"
+    }
+  ],
+  "database": {
+    "CLOUD_20261029T045023": [
+      {
+        "status": "error",
+        "count": 2,
+        "min_processing_ms": 0.0,
+        "max_processing_ms": 0.0,
+        "avg_processing_ms": 0.0
+      },
+      {
+        "status": "success",
+        "count": 66,
+        "min_processing_ms": 27.98,
+        "max_processing_ms": 260.58,
+        "avg_processing_ms": 65.04560606060606
+      },
+      {
+        "status": "unauthorized",
+        "count": 1,
+        "min_processing_ms": 4.06,
+        "max_processing_ms": 4.06,
+        "avg_processing_ms": 4.06
+      }
+    ],
+    "HPA_20261029T045028": [
+      {
+        "status": "success",
+        "count": 247,
+        "min_processing_ms": 137.74,
+        "max_processing_ms": 213.45,
+        "avg_processing_ms": 148.01453441295547
+      }
+    ],
+    "total_rows": 491
+  },
+  "legacy_container": {
+    "name": "/cloud-face-agent",
+    "image_id": "sha256:db37122e62f2cb72f4fbd4fda45458ebc78e9ea197f51af121b680758b97f5d2",
+    "state": {
+      "Status": "running",
+      "Running": true,
+      "Paused": false,
+      "Restarting": false,
+      "OOMKilled": false,
+      "Dead": false,
+      "Pid": 4555,
+      "ExitCode": 0,
+      "Error": "",
+      "StartedAt": "2026-10-22T07:19:07.405824421Z",
+      "FinishedAt": "2026-10-22T07:19:06.024036465Z",
+      "Health": {
+        "Status": "healthy",
+        "FailingStreak": 0,
+        "Log": [
+          {
+            "Start": "2026-10-29T11:51:59.635502301+07:00",
+            "End": "2026-10-29T11:51:59.662881693+07:00",
+            "ExitCode": 0,
+            "Output": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100   109  100   109    0     0   150k      0 --:--:-- --:--:-- --:--:--  106k\n{\"status\":\"healthy\",\"gpu_available\":true,\"device\":\"cuda:0\",\"gpu_name\":\"NVIDIA GeForce RTX 3050\",\"profiles\":4}"
+          },
+          {
+            "Start": "2026-10-29T11:52:29.663214111+07:00",
+            "End": "2026-10-29T11:52:29.690671979+07:00",
+            "ExitCode": 0,
+            "Output": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100   109  100   109    0     0   138k      0 --:--:-- --:--:-- --:--:--  106k\n{\"status\":\"healthy\",\"gpu_available\":true,\"device\":\"cuda:0\",\"gpu_name\":\"NVIDIA GeForce RTX 3050\",\"profiles\":4}"
+          },
+          {
+            "Start": "2026-10-29T11:52:59.691365012+07:00",
+            "End": "2026-10-29T11:52:59.718606369+07:00",
+            "ExitCode": 0,
+            "Output": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100   109  100   109    0     0   149k      0 --:--:-- --:--:-- --:--:--  106k\n{\"status\":\"healthy\",\"gpu_available\":true,\"device\":\"cuda:0\",\"gpu_name\":\"NVIDIA GeForce RTX 3050\",\"profiles\":4}"
+          },
+          {
+            "Start": "2026-10-29T11:53:29.719424386+07:00",
+            "End": "2026-10-29T11:53:29.746647233+07:00",
+            "ExitCode": 0,
+            "Output": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100   109  100   109    0     0   141k      0 --:--:-- --:--:-- --:--:--  106k\n{\"status\":\"healthy\",\"gpu_available\":true,\"device\":\"cuda:0\",\"gpu_name\":\"NVIDIA GeForce RTX 3050\",\"profiles\":4}"
+          },
+          {
+            "Start": "2026-10-29T11:53:59.747793104+07:00",
+            "End": "2026-10-29T11:53:59.775174573+07:00",
+            "ExitCode": 0,
+            "Output": "  % Total    % Received % Xferd  Average Speed   Time    Time     Time  Current\n                                 Dload  Upload   Total   Spent    Left  Speed\n\r  0     0    0     0    0     0      0      0 --:--:-- --:--:-- --:--:--     0\r100   109  100   109    0     0   144k      0 --:--:-- --:--:-- --:--:--  106k\n{\"status\":\"healthy\",\"gpu_available\":true,\"device\":\"cuda:0\",\"gpu_name\":\"NVIDIA GeForce RTX 3050\",\"profiles\":4}"
+          }
+        ]
+      }
+    }
+  },
+  "source_sha256": {
+    "main.py": "5e3e6ffb5dcf0c374fc091feee40e16242f6fb49cd5a9ac80dc6cb1d6bb7612d",
+    "cloud_app_main_full.py": "91417009dcb9a1008cfbfe520dba1d5ad0eb41b471383d471dda89a3b447d8b1"
+  },
+  "gpu": "NVIDIA GeForce RTX 3050, 6144 MiB, 731 MiB, 0 %",
+  "disk": "Filesystem      Size  Used Avail Use% Mounted on\n/dev/sda1       233G  193G   29G  88% /"
+}

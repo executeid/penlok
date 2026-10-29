@@ -1,0 +1,15 @@
+test_audit_failure_does_not_report_success (test_cloud_api.CloudApiTests.test_audit_failure_does_not_report_success) ... ok
+test_malformed_image_is_rejected_and_audited (test_cloud_api.CloudApiTests.test_malformed_image_is_rejected_and_audited) ... ok
+test_metrics_are_parseable_and_include_failures (test_cloud_api.CloudApiTests.test_metrics_are_parseable_and_include_failures) ... ok
+test_native_inference_reuses_one_worker_thread (test_cloud_api.CloudApiTests.test_native_inference_reuses_one_worker_thread) ... ok
+test_no_face_is_not_authorized (test_cloud_api.CloudApiTests.test_no_face_is_not_authorized) ... ok
+test_no_model_returns_unavailable (test_cloud_api.CloudApiTests.test_no_model_returns_unavailable) ... ok
+test_readiness_reports_database_failure (test_cloud_api.CloudApiTests.test_readiness_reports_database_failure) ... ok
+test_schema_and_routing_validation (test_cloud_api.CloudApiTests.test_schema_and_routing_validation) ... ok
+test_sqlite_fallback_persists_real_row (test_cloud_api.CloudApiTests.test_sqlite_fallback_persists_real_row) ... ok
+test_success_and_endpoint_aliases (test_cloud_api.CloudApiTests.test_success_and_endpoint_aliases) ... ok
+
+----------------------------------------------------------------------
+Ran 10 tests in 0.043s
+
+OK

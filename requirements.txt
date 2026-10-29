@@ -1,0 +1,10 @@
+# Versions observed in the working cloud container on 2026-10-29.
+# torch/torchvision are supplied by the PyTorch CUDA base image.
+facenet-pytorch==2.5.3
+fastapi==0.143.1
+uvicorn[standard]==0.54.0
+opencv-python-headless==5.0.0.93
+psycopg2-binary==2.9.13
+requests==2.32.3
+numpy==2.2.2
+pydantic==2.14.1

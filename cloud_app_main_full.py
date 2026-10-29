@@ -31,6 +31,8 @@ DB_CONFIG = {
 SQLITE_PATH = os.getenv("SQLITE_FALLBACK_PATH", "/home/penlok/app/cloud_task_log.db")
 YUNET_PATH = os.getenv("YUNET_PATH", "/home/penlok/app/face_detection_yunet_2023mar.onnx")
 EDGE_SYNC_URL = os.getenv("EDGE_SYNC_URL", "http://10.1.1.224:8600/api/v1/sync_user_face")
+EMBEDDINGS_PATH = os.getenv("EMBEDDINGS_PATH", "/home/penlok/app/gallery_embeddings.pt")
+GALLERY_PATH = os.getenv("GALLERY_PATH", "/home/penlok/app/gallery/imagetraining")
 
 # Global Deep Learning Model & Embeddings
 model: Optional[InceptionResnetV1] = None
@@ -80,9 +82,9 @@ def load_face_models():
     else:
         print("[WARN] YuNet model not found at", YUNET_PATH)
 
-    emb_path = "/home/penlok/app/gallery_embeddings.pt"
+    emb_path = EMBEDDINGS_PATH
     if os.path.exists(emb_path):
-        gallery_embeddings = torch.load(emb_path, map_location=DEVICE)
+        gallery_embeddings = torch.load(emb_path, map_location=DEVICE, weights_only=True)
         print(f"[MODEL] Loaded gallery profiles: {list(gallery_embeddings.keys())}")
     else:
         print("[WARN] Gallery embeddings not found at", emb_path)
@@ -262,7 +264,7 @@ def onboard_user(req: UserOnboardingRequest):
     global gallery_embeddings
     t0 = time.time()
     user_key = req.username.strip().lower().replace(" ", "_")
-    user_gallery_dir = os.path.join("/home/penlok/app/gallery/imagetraining", user_key)
+    user_gallery_dir = os.path.join(GALLERY_PATH, user_key)
     os.makedirs(user_gallery_dir, exist_ok=True)
 
     saved_tensors = []
@@ -302,7 +304,7 @@ def onboard_user(req: UserOnboardingRequest):
         mean_emb = torch.cat(saved_tensors, dim=0).mean(dim=0, keepdim=True)
         mean_emb = F.normalize(mean_emb, p=2, dim=1)
         gallery_embeddings[user_key] = mean_emb
-        torch.save(gallery_embeddings, "/home/penlok/app/gallery_embeddings.pt")
+        torch.save(gallery_embeddings, EMBEDDINGS_PATH)
         USER_DISPLAY_NAMES[user_key] = req.first_name or user_key.capitalize()
 
     edge_sync_status = "failed"

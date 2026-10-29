@@ -1,10 +1,13 @@
 services:
   cloud-face-agent:
+    # Compatibility service for the existing enrollment + edge integration.
+    # The audited inference API is deployed separately via cloud/k8s/.
     build:
       context: .
       dockerfile: Dockerfile
     image: cloud-face-agent:latest
     container_name: cloud-face-agent
+    command: ["uvicorn", "cloud_app_main_full:app", "--host", "0.0.0.0", "--port", "9000"]
     restart: unless-stopped
     ports:
       - "9000:9000"
@@ -22,6 +25,7 @@ services:
       - YUNET_PATH=/home/penlok/app/face_detection_yunet_2023mar.onnx
       - EDGE_SYNC_URL=http://10.1.1.224:8600/api/v1/sync_user_face
     volumes:
+      - ./face_detection_yunet_2023mar.onnx:/home/penlok/app/face_detection_yunet_2023mar.onnx:ro
       - ./gallery:/home/penlok/app/gallery
       - ./gallery_embeddings.pt:/home/penlok/app/gallery_embeddings.pt
       - ./cloud_task_log.db:/home/penlok/app/cloud_task_log.db

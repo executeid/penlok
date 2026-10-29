@@ -1,0 +1,10 @@
+{
+  "version": "penlok-cloud-agent:20261029-v1",
+  "pod": "cloud-api-754f9b7c66-c26rb",
+  "memory_limit": "2Gi",
+  "observation_source": "Live kubectl inspection during the first sustained HPA test; command output recorded in the task conversation",
+  "last_terminated_reason": "OOMKilled",
+  "restart_count_at_first_saved_observation": 2,
+  "action_taken": "Terminated only cloud/check_hpa.py load generator; deployed v2 with dedicated native inference thread and 3Gi memory limit",
+  "limitation": "First load generator was interrupted before writing its final JSON report. Do not fabricate its success rate, request count or HPA timing. Native allocator/thread behavior is a suspected contributor, not a proven root-cause profile."
+}

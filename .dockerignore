@@ -9,3 +9,8 @@ smartbox_web/
 .git/
 __pycache__/
 *.pyc
+gallery/
+gallery_embeddings.pt
+cloud_task_log.db
+cloud/.env
+cloud/evidence/

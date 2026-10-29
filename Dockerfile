@@ -9,11 +9,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Pre-populate pretrained face model cache
-COPY checkpoints/ /root/.cache/torch/checkpoints/
-RUN python3 -c "from facenet_pytorch import InceptionResnetV1; InceptionResnetV1(pretrained='vggface2')"
-
-COPY . .
+COPY main.py cloud_app_main_full.py ./
+# Model checkpoint, YuNet and enrollment gallery are provisioned as runtime
+# mounts. Startup fails clearly if those assets are absent.
 
 # Symlink /app to /home/penlok/app for path compatibility
 RUN ln -s /home/penlok/app /app

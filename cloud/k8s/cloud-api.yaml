@@ -1,0 +1,112 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloud-api
+  namespace: cloud-agent
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  selector:
+    matchLabels:
+      app: cloud-api
+  template:
+    metadata:
+      labels:
+        app: cloud-api
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9000"
+        prometheus.io/path: /metrics
+    spec:
+      nodeSelector:
+        kubernetes.io/hostname: pengmas-tri
+      runtimeClassName: nvidia
+      containers:
+        - name: cloud-api
+          image: penlok-cloud-agent:20261029-v2
+          imagePullPolicy: Never
+          command: [uvicorn, "main:app", --host, "0.0.0.0", --port, "9000"]
+          args: []
+          ports:
+            - name: http
+              containerPort: 9000
+          envFrom:
+            - secretRef:
+                name: cloud-agent-db
+          env:
+            - name: NVIDIA_VISIBLE_DEVICES
+              value: "0"
+            - name: NVIDIA_DRIVER_CAPABILITIES
+              value: compute,utility
+            - name: REQUIRE_GPU
+              value: "1"
+            - name: YUNET_PATH
+              value: /models/face_detection_yunet_2023mar.onnx
+            - name: EMBEDDINGS_PATH
+              value: /models/gallery_embeddings.pt
+            - name: SQLITE_FALLBACK_PATH
+              value: /audit/cloud_task_log.db
+          resources:
+            requests:
+              cpu: 500m
+              memory: 1Gi
+            limits:
+              cpu: "2"
+              memory: 3Gi
+          startupProbe:
+            httpGet: {path: /health, port: http}
+            periodSeconds: 5
+            failureThreshold: 36
+          readinessProbe:
+            httpGet: {path: /ready, port: http}
+            timeoutSeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet: {path: /health, port: http}
+            timeoutSeconds: 5
+            periodSeconds: 15
+          volumeMounts:
+            - {name: models, mountPath: /models, readOnly: true}
+            - {name: torch-cache, mountPath: /root/.cache/torch, readOnly: true}
+            - {name: audit, mountPath: /audit}
+      volumes:
+        - name: models
+          hostPath: {path: /home/penlok/app, type: Directory}
+        - name: torch-cache
+          hostPath: {path: /home/penlok/.cache/torch, type: Directory}
+        - name: audit
+          hostPath: {path: /home/penlok/cloud-agent-runtime/data, type: Directory}
+---
+# Keep the old NodePort/service port; it now forwards to the real API at 9000.
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-api
+  namespace: cloud-agent
+spec:
+  type: NodePort
+  selector: {app: cloud-api}
+  ports:
+    - name: http
+      port: 8000
+      targetPort: 9000
+      nodePort: 31161
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cloud-api-svc
+  namespace: cloud-agent
+spec:
+  type: NodePort
+  selector: {app: cloud-api}
+  ports:
+    - name: http
+      port: 9000
+      targetPort: 9000
+      nodePort: 30900
