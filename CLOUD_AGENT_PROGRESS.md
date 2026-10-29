@@ -14,7 +14,9 @@ Status di bawah berdasarkan pengujian dan evidence yang tersimpan. Dokumen
 ini merangkum pengujian sebelumnya, bukan hasil pemeriksaan server yang baru.
 Angka **100%** berarti fungsi komponen dalam lingkup cloud sudah terverifikasi;
 bukan persentase kelulusan seluruh proyek, akurasi wajah, atau pencapaian target
-performa. Tanda **—** berarti persentasenya belum dapat ditentukan dari bukti.
+performa. Persentase komponen yang belum lengkap adalah **estimasi progres
+pekerjaan berdasarkan checklist** yang dijelaskan setelah tabel, bukan angka
+hasil pengukuran keberhasilan atau akurasi.
 
 ## 1. Tabel progres Cloud Agent
 
@@ -24,15 +26,43 @@ performa. Tanda **—** berarti persentasenya belum dapat ditentukan dari bukti.
 | Namespace Cloud Agent | Selesai | 100% | Namespace `cloud-agent` aktif. |
 | Service / NodePort | Selesai | 100% | NodePort `31161` dan `30900` menuju API asli. Health dan readiness merespons HTTP 200 dari host cloud. |
 | Deployment Cloud API | Selesai | 100% | Pod dummy diganti dengan API YuNet + FaceNet CUDA. Snapshot akhir menunjukkan satu pod Ready dengan restart count 0. |
-| Koneksi Edge → Cloud | Belum diverifikasi ulang | — | Dokumen awal memiliki bukti historis. Pengujian terbaru dijalankan dari host cloud, bukan edge. |
+| Koneksi Edge → Cloud | Sebagian; sisi edge belum diverifikasi ulang | 50% | Endpoint cloud siap dan teruji dari host cloud. Uji koneksi terbaru dari edge belum dilakukan; dokumen awal memiliki bukti historis. |
 | FastAPI Cloud Agent | Selesai | 100% | Endpoint health, readiness, migration, alias migrate, validasi request, respons JSON, dan metrik telah diuji. |
 | PostgreSQL | Selesai untuk audit cloud | 100% | Database `penlok_cloud` pada host cloud port `5432` dapat diakses. Instance PostgreSQL K3s di namespace `database` merupakan instance lain. |
 | API → PostgreSQL | Selesai | 100% | Query database mengonfirmasi seluruh 69 record pengujian fungsi/burst v2 dan 247 record pengujian HPA. |
 | Face Recognition Cloud | Integrasi selesai | 100% | YuNet mendeteksi wajah dan FaceNet melakukan inference pada CUDA. Empat foto enrollment dikenali; gambar tanpa wajah ditolak. Akurasi independen belum diuji. |
-| Migration Data Asli | Sebagian | — | Payload JPEG nyata berhasil diproses, tetapi berasal dari gallery cloud, bukan capture baru perangkat edge. |
-| Return Hasil ke Edge | Sebagian | — | Kontrak respons, `task_id`, status, dan hasil inference teruji melalui HTTP. Penggunaan hasil oleh perangkat edge belum diuji ulang. |
-| Monitoring / Pengujian | Sebagian | — | Metrik, unit test, burst, beban berkelanjutan, HPA dan recovery telah diuji. Dashboard Grafana khusus dan target latensi masih belum selesai. |
-| End-to-End | Belum diverifikasi ulang | — | Jalur HTTP cloud → inference → database → respons terbukti. Jalur lengkap Smart Box → scheduler → migration → cloud → relai belum diulang. |
+| Migration Data Asli | Sebagian | 50% | Payload JPEG nyata berhasil diproses, tetapi berasal dari gallery cloud, bukan capture baru perangkat edge. |
+| Return Hasil ke Edge | Sebagian | 50% | Kontrak respons, `task_id`, status, dan hasil inference teruji melalui HTTP. Penggunaan hasil oleh perangkat edge belum diuji ulang. |
+| Monitoring / Pengujian | Sebagian | 70% | Tujuh dari sepuluh butir checklist di bawah terverifikasi. Dashboard, pencapaian SLA, dan ketahanan lanjutan masih belum selesai. |
+| End-to-End | Sebagian; jalur lengkap belum diverifikasi ulang | 50% | Jalur HTTP cloud → inference → database → respons terbukti. Jalur lengkap Smart Box → scheduler → migration → cloud → relai belum diulang. |
+
+### Dasar persentase komponen yang belum lengkap
+
+Untuk koneksi, migrasi data, pengembalian hasil, dan end-to-end, progres
+dibagi menjadi dua milestone berbobot sama: **kesiapan/pengujian segmen cloud
+(50%)** dan **verifikasi integrasi aktual dengan edge (50%)**. Milestone cloud
+sudah terbukti, sedangkan milestone integrasi edge belum diuji ulang. Karena
+itu masing-masing dicatat **50%**, bukan dianggap belum ada implementasi.
+
+Untuk monitoring/pengujian digunakan sepuluh butir berbobot sama (10% per
+butir):
+
+| Butir | Status | Kontribusi progres |
+|---|---|---:|
+| Endpoint metrik dan penyimpanan hasil scrape | Terverifikasi | 10% |
+| Unit test kontrak dan fallback | Terverifikasi | 10% |
+| Uji fungsi dan input negatif pada API nyata | Terverifikasi | 10% |
+| Burst 10/50 request | Terverifikasi secara fungsional | 10% |
+| Beban berkelanjutan dengan hasil tersimpan | Terverifikasi pada durasi uji | 10% |
+| Autoscaling HPA 1 → 2 → 1 | Terverifikasi | 10% |
+| Recovery pod | Terverifikasi | 10% |
+| Dashboard Grafana khusus Cloud Agent | Belum terverifikasi | 0% |
+| Pencapaian kedua target latensi (<15 ms inference dan P95 <400 ms) | Belum tercapai | 0% |
+| Uji ketahanan lanjutan: operasi panjang, network partition, dan outage aktual | Belum lengkap | 0% |
+| **Total monitoring/pengujian** | **7 dari 10 butir** | **70%** |
+
+Checklist ini adalah dasar pelaporan progres pekerjaan yang dipakai dalam
+dokumen ini, bukan bobot resmi yang tercantum pada dokumen acuan awal.
 
 ## 2. Pengujian langsung pada server cloud
 

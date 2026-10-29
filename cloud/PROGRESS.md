@@ -21,8 +21,13 @@ dan pekerjaan yang belum terbukti. Tidak ada persentase perkiraan keseluruhan.
 ## Tabel progres sesuai komponen dokumen awal
 
 Angka 100% hanya dipakai untuk komponen dengan kriteria fungsi cloud yang
-sudah teruji. Tanda — berarti persentase tidak dapat dihitung dari bukti yang
-ada. Tidak ada klaim 100% untuk keseluruhan proyek atau pencapaian SLA.
+sudah teruji. Komponen lintas edge/cloud memakai dua milestone berbobot sama:
+kesiapan dan pengujian segmen cloud (50%), lalu verifikasi aktual integrasi
+edge (50%). Monitoring memakai sepuluh butir berbobot sama; tujuh terverifikasi
+sehingga progresnya 70%. Ini adalah estimasi progres pekerjaan berdasarkan
+checklist pelaporan, bukan pengukuran akurasi atau kelulusan SLA. Rincian
+checklist terdapat di [laporan utama](../CLOUD_AGENT_PROGRESS.md#dasar-persentase-komponen-yang-belum-lengkap).
+Tidak ada klaim 100% untuk keseluruhan proyek atau pencapaian SLA.
 
 | Komponen | Status sekarang | Progress | Bukti / batas hasil |
 |---|---|---:|---|
@@ -30,15 +35,15 @@ ada. Tidak ada klaim 100% untuk keseluruhan proyek atau pencapaian SLA.
 | Namespace Cloud Agent | Selesai | 100% | `cloud-agent` aktif. |
 | Service / NodePort | Selesai | 100% | 31161 dan 30900 menuju API asli; readiness HTTP 200. |
 | Deployment Cloud API | Selesai | 100% | `penlok-cloud-agent:20261029-v2`, GPU CUDA, satu pod Ready pada snapshot akhir. |
-| Koneksi Edge → Cloud | Belum diverifikasi ulang | — | Pengujian baru berasal dari host cloud. Bukti koneksi edge dalam dokumen awal adalah bukti historis. |
+| Koneksi Edge → Cloud | Sebagian; sisi edge belum diverifikasi ulang | 50% | Endpoint cloud siap dan teruji dari host cloud. Bukti koneksi edge dalam dokumen awal adalah bukti historis; pengujian terbaru dari edge belum dilakukan. |
 | FastAPI Cloud Agent | Selesai | 100% | Health, readiness, migration/migrate alias, validasi, metrik dan respons JSON diuji. |
 | PostgreSQL | Selesai untuk audit cloud | 100% | Koneksi aktual ke `penlok_cloud` di port 5432; bukan sekadar keberadaan manifest. |
 | API → PostgreSQL | Selesai | 100% | Query langsung menemukan seluruh 69 record smoke/burst v2 dan 247 record HPA. Termasuk error/penolakan yang disengaja. |
 | Face Recognition Cloud | Integrasi selesai | 100% | YuNet + FaceNet pada CUDA; empat foto enrollment dikenali, gambar kosong ditolak. Akurasi independen belum diukur. |
-| Migration Data Asli | Sebagian | — | JPEG nyata diproses, tetapi berasal dari gallery cloud, bukan capture baru dari edge. |
-| Return Hasil ke Edge | Sebagian | — | Kontrak respons dan korelasi task_id diuji melalui HTTP. Penerimaan/penggunaan respons oleh edge belum diuji ulang. |
-| Monitoring / Pengujian | Sebagian | — | Metrik Prometheus, unit test, burst, sustained load, HPA dan recovery tersedia. Dashboard khusus dan target latensi belum selesai. |
-| End-to-End | Belum diverifikasi ulang | — | Cloud HTTP → GPU → DB → respons terbukti. Jalur Smart Box → scheduler → migration → cloud → relai belum diulang. |
+| Migration Data Asli | Sebagian | 50% | JPEG nyata diproses, tetapi berasal dari gallery cloud, bukan capture baru dari edge. |
+| Return Hasil ke Edge | Sebagian | 50% | Kontrak respons dan korelasi task_id diuji melalui HTTP. Penerimaan/penggunaan respons oleh edge belum diuji ulang. |
+| Monitoring / Pengujian | Sebagian | 70% | Tujuh dari sepuluh butir terverifikasi: metrik, unit, fungsi/negatif, burst, sustained load, HPA, recovery. Dashboard, SLA, dan ketahanan lanjutan belum lengkap. |
+| End-to-End | Sebagian; jalur lengkap belum diverifikasi ulang | 50% | Cloud HTTP → GPU → DB → respons terbukti. Jalur Smart Box → scheduler → migration → cloud → relai belum diulang. |
 
 Sumber utama: [snapshot server/DB](evidence/cloud-final-state.json),
 [smoke dan burst v2](evidence/CLOUD_20261029T045023.json),
