@@ -1,0 +1,44 @@
+services:
+  edge-gateway-sync:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge-gateway-sync
+    image: penlock-edge-gateway-sync:latest
+    container_name: edge-gateway-sync
+    restart: unless-stopped
+    ports:
+      - "${EDGE_GATEWAY_PORT:-8600}:8600"
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Jakarta
+    devices:
+      - /dev/gpiochip15:/dev/gpiochip15
+    volumes:
+      - /usr/share/zoneinfo/Asia/Jakarta:/etc/localtime:ro
+      - /home/pi/penlock:/home/pi/penlock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  edge-hardware-daemon:
+    build:
+      context: .
+      dockerfile: Dockerfile.edge-hardware-daemon
+    image: penlock-edge-hardware-daemon:latest
+    container_name: edge-hardware-daemon
+    restart: unless-stopped
+    privileged: true
+    env_file:
+      - .env
+    environment:
+      - TZ=Asia/Jakarta
+    devices:
+      - /dev/gpiochip15:/dev/gpiochip15
+      - /dev/video0:/dev/video0
+      - /dev/i2c-1:/dev/i2c-1
+      - /dev/input:/dev/input
+    volumes:
+      - /usr/share/zoneinfo/Asia/Jakarta:/etc/localtime:ro
+      - /home/pi/penlock:/home/pi/penlock
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

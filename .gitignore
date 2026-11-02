@@ -1,5 +1,16 @@
 __pycache__/
 *.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv/
+*.tar
+*.tar.gz
+*.db
+*.sqlite3
 /cloud/.env
 /cloud/evidence/private/
 /checkpoints/
@@ -7,3 +18,5 @@ __pycache__/
 /gallery_embeddings.pt
 /face_detection_yunet_2023mar.onnx
 /cloud_task_log.db
+.DS_Store
+Thumbs.db
