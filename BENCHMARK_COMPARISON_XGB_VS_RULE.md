@@ -91,21 +91,20 @@ Data di bawah ini dicatat langsung oleh sensor telemetri sistem selama eksekusi 
 
 ## 5. Analisis Karakteristik & Pembahasan Mendalam
 
+#### A. Karakteristik XGBoost (Alur Menyamping - Konservatif Jaringan)
 ```mermaid
-flowchart TD
-    subgraph KarakterXGB ["Karakteristik XGBoost (Konservatif Jaringan)"]
-        X1["Evaluasi 7 Fitur Telemetri"] --> X2["Konkurensi = 4, Antrean Q <= 4"]
-        X2 -->|"Model Menganggap CPU Pi 5 Mampu"| X3["98.5% Tetap di Edge"]
-        X3 --> X4["Hemat Kuota & Bandwidth Internet\nPrivasi Data Maksimal di Lemari\nLatensi P50: 357.5 ms"]
-    end
+flowchart LR
+    X1["Evaluasi 7 Fitur Telemetri"] --> X2["Konkurensi 4, Antrean Q <= 4"]
+    X2 -->|"Model Anggap CPU Mampu"| X3["98.5% Tetap di Edge"]
+    X3 --> X4["Hemat Bandwidth & Privasi Lokal\nLatensi P50: 357.5 ms"]
+```
 
-    subgraph KarakterRule ["Karakteristik Rule-Based (Sensitif Beban CPU)"]
-        R1["Ambang Batas Tegas: CPU > 80%"] --> R2["Konkurensi 4 membuat CPU Pi 5 > 80%"]
-        R2 -->|"Langsung Terpicu Rule 1"| R3["63.0% Dimigrasikan ke Cloud GPU"]
-        R3 --> R4["Beban Pi 5 Cepat Berkurang\nLatensi P50 Sangat Kilat: 61.3 ms\nThroughput Tinggi: 26.62 req/s"]
-    end
-
-    X4 ~~~ R1
+#### B. Karakteristik Rule-Based (Alur Menyamping - Sensitif Beban CPU)
+```mermaid
+flowchart LR
+    R1["Ambang Batas CPU > 80%"] --> R2["Konkurensi 4 Bikin CPU Pi 5 > 80%"]
+    R2 -->|"Langsung Terpicu Rule 1"| R3["63.0% Migrasi ke Cloud GPU"]
+    R3 --> R4["Beban Pi 5 Cepat Berkurang\nLatensi P50: 61.3 ms (26.62 req/s)"]
 ```
 
 ### 5.1 Karakteristik XGBoost: *Network-Conservative & Edge-Centric*
