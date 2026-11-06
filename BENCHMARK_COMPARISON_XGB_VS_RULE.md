@@ -36,12 +36,12 @@ flowchart LR
         Inception["FastAPI Port 9000\nNVIDIA RTX 3050 CUDA (512-d)"]
     end
 
-    Client -->|1. Kirim Telemetri| XGB
-    Client -->|1. Evaluasi Aturan| Rule
-    XGB -->|2. Decision 0 (Edge)| LocalModel
-    XGB -->|2. Decision 1 (Cloud)| Inception
-    Rule -->|Decision 0| LocalModel
-    Rule -->|Decision 1| Inception
+    Client -->|"1. Kirim Telemetri"| XGB
+    Client -->|"1. Evaluasi Aturan"| Rule
+    XGB -->|"2. Decision 0: Edge"| LocalModel
+    XGB -->|"2. Decision 1: Cloud"| Inception
+    Rule -->|"Decision 0: Edge"| LocalModel
+    Rule -->|"Decision 1: Cloud"| Inception
 ```
 
 | Node | Perangkat / Sistem Operasi | Peran Utama | Spesifikasi Kunci |
@@ -94,14 +94,14 @@ Data di bawah ini dicatat langsung oleh sensor telemetri sistem selama eksekusi 
 ```mermaid
 flowchart TD
     subgraph KarakterXGB ["Karakteristik XGBoost (Konservatif Jaringan)"]
-        X1["Evaluasi 7 Fitur Telemetri"] --> X2{"Konkurensi = 4\nAntrean Q <= 4"}
-        X2 -->|Model Menganggap CPU Pi 5 Mampu| X3["98.5% Tetap di Edge"]
+        X1["Evaluasi 7 Fitur Telemetri"] --> X2["Konkurensi = 4, Antrean Q <= 4"]
+        X2 -->|"Model Menganggap CPU Pi 5 Mampu"| X3["98.5% Tetap di Edge"]
         X3 --> X4["Hemat Kuota & Bandwidth Internet\nPrivasi Data Maksimal di Lemari\nLatensi P50: 357.5 ms"]
     end
 
     subgraph KarakterRule ["Karakteristik Rule-Based (Sensitif Beban CPU)"]
-        R1["Ambang Batas Tegas: CPU > 80%"] --> R2{"Konkurensi 4 membuat\nCPU Pi 5 > 80%"}
-        R2 -->|Langsung Terpicu Rule 1| R3["63.0% Dimigrasikan ke Cloud GPU"]
+        R1["Ambang Batas Tegas: CPU > 80%"] --> R2["Konkurensi 4 membuat CPU Pi 5 > 80%"]
+        R2 -->|"Langsung Terpicu Rule 1"| R3["63.0% Dimigrasikan ke Cloud GPU"]
         R3 --> R4["Beban Pi 5 Cepat Berkurang\nLatensi P50 Sangat Kilat: 61.3 ms\nThroughput Tinggi: 26.62 req/s"]
     end
 ```
