@@ -243,11 +243,6 @@ def log_task(task_id: str, device_id: str, proc_time: float, status: str, user_i
                         "VALUES (%s, %s, %s, %s, %s, %s, %s);",
                         (task_id, device_id, now_wib(), proc_time, status, user_id, confidence)
                     )
-                    cur.execute("""
-                        INSERT INTO mas_decision_history 
-                        (task_id, timestamp, decision, decision_label, execution_node, model_used, cpu_pct, ram_pct, latency_ms, priority, queue_len, execution_time_ms, user_id, confidence, status, notes)
-                        VALUES (%s, %s, 1, 'MIGRASI_CLOUD', 'Cloud GPU (RTX 3050)', 'XGBoost v2.0', 88.5, 82.0, 10.2, 3, 3, %s, %s, %s, %s, 'Offloaded ke GPU: CPU Edge tinggi');
-                    """, (task_id, now_wib(), proc_time, user_id or "UNKNOWN", confidence, status.upper()))
             db_pool.putconn(conn)
             return "postgres"
         except Exception as e:
