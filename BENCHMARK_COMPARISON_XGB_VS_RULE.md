@@ -77,6 +77,9 @@ Data di bawah ini dicatat langsung oleh sensor telemetri sistem selama eksekusi 
 | **Throughput Sistem (TPS)** | **11.61 req / detik** | **26.62 req / detik** | Rule-Based **+129.3% lebih tinggi** |
 | **Beban Diproses di Edge** | **197 task (98.5%)** | **74 task (37.0%)** | XGBoost menahan 98.5% di lokal |
 | **Beban Dialihkan ke Cloud** | **3 task (1.5%)** | **126 task (63.0%)** | Rule-Based memigrasikan 63% ke GPU |
+| **Hasil Pengenalan BENAR [V]** | **160 task (80.0%)** | **148 task (74.0%)** | XGBoost unggul pada kestabilan pengenalan |
+| **Hasil Pengenalan SALAH [X]** | **40 task (20.0%)** | **52 task (26.0%)** | Terutama pada frame sudut ekstrem Loker Cam |
+| **Tingkat Akurasi Wajah (%)** | **80.0%** | **74.0%** | Akurasi identitas pemilik sah |
 | **Median Latensi P50** | **357.5 ms** | **61.3 ms** | Rule-Based **82.8% lebih rendah** |
 | **P90 Latensi** | **521.5 ms** | **361.8 ms** | Rule-Based lebih cepat 159.7 ms |
 | **P95 Latensi** | **610.8 ms** | **407.2 ms** | Rule-Based lebih cepat 203.6 ms |
@@ -91,7 +94,7 @@ Data di bawah ini dicatat langsung oleh sensor telemetri sistem selama eksekusi 
 
 ## 5. Analisis Karakteristik & Pembahasan Mendalam
 
-#### A. Karakteristik XGBoost (Alur Menyamping - Konservatif Jaringan)
+#### A. Karakteristik XGBoost (Konservatif Jaringan)
 ```mermaid
 flowchart LR
     X1["Evaluasi 7 Fitur Telemetri"] --> X2["Konkurensi 4, Antrean Q <= 4"]
@@ -99,7 +102,7 @@ flowchart LR
     X3 --> X4["Hemat Bandwidth & Privasi Lokal\nLatensi P50: 357.5 ms"]
 ```
 
-#### B. Karakteristik Rule-Based (Alur Menyamping - Sensitif Beban CPU)
+#### B. Karakteristik Rule-Based (Sensitif Beban CPU)
 ```mermaid
 flowchart LR
     R1["Ambang Batas CPU > 80%"] --> R2["Konkurensi 4 Bikin CPU Pi 5 > 80%"]

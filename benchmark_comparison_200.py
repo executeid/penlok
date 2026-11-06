@@ -8,8 +8,11 @@ Configurable:
   - Total requests: -t / --total (default: 200)
   - Concurrency: -c / --conn / --concurrency (default: 4)
   - Algorithm mode: -a / --algo (both / xgboost / rule_based, default: both)
-Dataset: Real 5-People Face Profiles (Akmal, Iqbal, Shafwan, Syauqi, Loker Cam)
-Live per-request log streaming enabled.
+Features:
+  - Real 5-People Face Profiles (Akmal, Iqbal, Shafwan, Syauqi, Loker Cam)
+  - Ground-truth evaluation: labels each prediction as BENAR [V] or SALAH [X]
+  - Calculates accuracy percentage (Benar % vs Salah %) in summary and head-to-head table
+  - Live per-request log streaming enabled
 """
 
 import sys
@@ -35,22 +38,27 @@ sched_session.mount("http://", adapter)
 FACE_PROFILES = [
     {
         "name": "Akmal",
+        "valid_aliases": ["akmal"],
         "path": "/home/pi/penlock/software/Django-Backend-Project/media/imagetraining/akmal/akmal_imported_1.jpg"
     },
     {
         "name": "Iqbal (balbal)",
+        "valid_aliases": ["iqbal", "balbal"],
         "path": "/home/pi/penlock/software/Django-Backend-Project/media/imagetraining/balbal/iqbal_1_20251222_115527_948818.jpg"
     },
     {
         "name": "Shafwan (panpenlok)",
+        "valid_aliases": ["shafwan", "panpenlok"],
         "path": "/home/pi/penlock/software/Django-Backend-Project/media/imagetraining/panpenlok/pan_1_20251217_160442_713875.jpg"
     },
     {
         "name": "Syauqi (soqisoqi)",
+        "valid_aliases": ["syauqi", "soqisoqi"],
         "path": "/home/pi/penlock/software/Django-Backend-Project/media/imagetraining/soqisoqi/soqi_10_20251216_162141_427841.jpg"
     },
     {
-        "name": "Loker Cam (Real)",
+        "name": "Loker Cam (Akmal)",
+        "valid_aliases": ["akmal"],
         "path": "/home/pi/penlock/test_camera.jpg"
     }
 ]
@@ -59,15 +67,30 @@ print_lock = threading.Lock()
 queue_lock = threading.Lock()
 active_queue = 0
 
+def check_is_correct(person_data: dict, recognized_user: str) -> bool:
+    if not recognized_user:
+        return False
+    rec_clean = str(recognized_user).strip().lower()
+    if rec_clean in ("no_face_detected", "unknown", "unauthorized", "no_match", "failed") or "err:" in rec_clean:
+        return False
+    valid = [a.lower() for a in person_data.get("valid_aliases", [person_data["name"]])]
+    return any(alias in rec_clean for alias in valid)
+
 def load_face_data():
     loaded = []
-    print("[DATASET] Memuat 5 profil wajah riil:")
+    print("[DATASET] Memuat 5 profil wajah riil dengan ground truth:")
     for p in FACE_PROFILES:
         if os.path.exists(p["path"]):
             with open(p["path"], "rb") as f:
                 data = f.read()
-            loaded.append({"name": p["name"], "bytes": data, "size_kb": len(data)//1024})
-            print(f"  • {p['name']:20s} ({len(data)//1024} KB)")
+            loaded.append({
+                "name": p["name"],
+                "valid_aliases": p["valid_aliases"],
+                "bytes": data,
+                "size_kb": len(data)//1024
+            })
+            aliases_str = "/".join(p["valid_aliases"])
+            print(f"  • {p['name']:20s} (Target: {aliases_str:18s} | {len(data)//1024:3d} KB)")
         else:
             print(f"  [-] Tidak ditemukan: {p['path']}")
     if not loaded:
@@ -193,35 +216,40 @@ def execute_single_task(req_id: int, total_requests: int, person_data: dict, alg
     conf_pct = int(float(confidence or 0.0) * 100)
     user_display = str(recognized_user or "UNKNOWN")
 
+    is_correct = check_is_correct(person_data, user_display)
+    result_tag = "BENAR [V]" if is_correct else "SALAH [X]"
+
     # Real-time streaming log per request
     with print_lock:
         dec_tag = "CLOUD [>>]" if decision == 1 else "EDGE  [--]"
         print(
             f"[{now_str}] #{req_id:03d}/{total_requests:03d} | {algo_mode:10s} | {person_data['name']:18s} | "
             f"CPU:{cpu_now:4.1f}% Q:{q_depth:02d} | {dec_tag} -> {exec_node:17s} | "
-            f"{dur_ms:6.1f}ms | User: {user_display:11s} ({conf_pct:2d}%)",
+            f"{dur_ms:6.1f}ms | User: {user_display:11s} ({conf_pct:2d}%) | {result_tag}",
             flush=True
         )
 
     return {
         "req_id": req_id,
         "algo": algo_mode,
+        "person": person_data["name"],
         "decision": decision,
         "exec_node": exec_node,
         "latency_ms": dur_ms,
         "user": user_display,
-        "conf": confidence
+        "conf": confidence,
+        "is_correct": is_correct
     }
 
 def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req: int, concurrency: int):
     n_profiles = len(profiles)
-    print("\n" + "="*115)
+    print("\n" + "="*125)
     print(f"  MEMULAI PENGUJIAN: ALGORITMA {algo_name.upper()}")
     print(f"  Total Request: {total_req} | Concurrency: {concurrency} workers | Dataset: 5 Profil Wajah Riil")
-    print("="*115)
+    print("="*125)
     print("Format Log Streaming Real-Time:")
-    print("[WAKTU]   #Req/Total | Algoritma  | Foto Profil        | Status Beban    | Keputusan Rute -> Node Pelaksana | Latensi | Hasil Pengenalan")
-    print("-" * 115)
+    print("[WAKTU]   #Req/Total | Algoritma  | Foto Profil        | Status Beban    | Keputusan Rute -> Node Pelaksana | Latensi | Hasil Pengenalan | Validasi")
+    print("-" * 125)
 
     sampler = RealTimeSampler(interval=0.03)
     sampler.start()
@@ -241,6 +269,14 @@ def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req: int, 
     latencies = [r["latency_ms"] for r in results]
     edge_tasks = [r for r in results if r["decision"] == 0]
     cloud_tasks = [r for r in results if r["decision"] == 1]
+
+    # Accuracy calculations
+    correct_tasks = [r for r in results if r["is_correct"]]
+    wrong_tasks = [r for r in results if not r["is_correct"]]
+    correct_count = len(correct_tasks)
+    wrong_count = len(wrong_tasks)
+    acc_pct = round((correct_count / total_req) * 100.0, 1)
+    wrong_pct = round((wrong_count / total_req) * 100.0, 1)
 
     lat_sorted = sorted(latencies)
     p50 = statistics.median(lat_sorted)
@@ -267,6 +303,10 @@ def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req: int, 
         "edge_pct": round(edge_pct, 1),
         "cloud_count": len(cloud_tasks),
         "cloud_pct": round(cloud_pct, 1),
+        "correct_count": correct_count,
+        "correct_pct": acc_pct,
+        "wrong_count": wrong_count,
+        "wrong_pct": wrong_pct,
         "p50_ms": round(p50, 1),
         "p90_ms": round(lat_sorted[idx_p90], 1),
         "p95_ms": round(lat_sorted[idx_p95], 1),
@@ -278,11 +318,12 @@ def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req: int, 
         "max_ram": metrics["max_ram"]
     }
 
-    print("-" * 115)
+    print("-" * 125)
     print(f"  RINGKASAN HASIL: {algo_name.upper()}")
-    print(f"  Waktu Selesai: {wall_duration:.2f}s | TPS: {tps} req/s | Edge: {len(edge_tasks)} ({edge_pct:.1f}%) | Cloud: {len(cloud_tasks)} ({cloud_pct:.1f}%)")
-    print(f"  Latensi: P50={p50:.1f}ms | P95={lat_sorted[idx_p95]:.1f}ms | Avg Cloud={avg_cloud:.1f}ms | Avg Edge={avg_edge:.1f}ms")
-    print("=" * 115)
+    print(f"  Waktu Selesai : {wall_duration:.2f}s | TPS: {tps} req/s | Edge: {len(edge_tasks)} ({edge_pct:.1f}%) | Cloud: {len(cloud_tasks)} ({cloud_pct:.1f}%)")
+    print(f"  Akurasi Wajah : BENAR = {correct_count} ({acc_pct}%) | SALAH = {wrong_count} ({wrong_pct}%)")
+    print(f"  Latensi RTT   : P50={p50:.1f}ms | P95={lat_sorted[idx_p95]:.1f}ms | Avg Cloud={avg_cloud:.1f}ms | Avg Edge={avg_edge:.1f}ms")
+    print("=" * 125)
 
     return summary
 
@@ -298,10 +339,10 @@ def main():
 
     args = parser.parse_args()
 
-    print("="*115)
-    print("  PENLOK CONFIGURABLE LOAD BENCHMARK")
+    print("="*125)
+    print("  PENLOK CONFIGURABLE LOAD BENCHMARK (DENGAN EVALUASI AKURASI IDENTITAS)")
     print(f"  Parameter: Total={args.total} req/algo | Concurrency={args.conn} workers | Mode={args.algo.upper()}")
-    print("="*115)
+    print("="*125)
 
     profiles = load_face_data()
 
@@ -322,17 +363,25 @@ def main():
         summary_xgb = summaries["XGBoost"]
         summary_rule = summaries["Rule-Based"]
 
-        print("\n" + "="*115)
+        print("\n" + "="*125)
         print(f"  TABEL PERBANDINGAN HEAD-TO-HEAD: XGBOOST VS RULE-BASED (TOTAL {args.total} REQ, CONCURRENCY {args.conn})")
-        print("="*115)
-        print(f"{'Metrik Pengujian':<35} | {'XGBoost (ML Classifier)':<35} | {'Rule-Based (Baseline)':<35}")
-        print("-" * 115)
+        print("="*125)
+        print(f"{'Metrik Pengujian':<35} | {'XGBoost (ML Classifier)':<40} | {'Rule-Based (Baseline)':<40}")
+        print("-" * 125)
         tps_xgb = f"{summary_xgb['tps']} req/s"
         tps_rule = f"{summary_rule['tps']} req/s"
         edge_xgb = f"{summary_xgb['edge_count']} task ({summary_xgb['edge_pct']}%)"
         edge_rule = f"{summary_rule['edge_count']} task ({summary_rule['edge_pct']}%)"
         cloud_xgb = f"{summary_xgb['cloud_count']} task ({summary_xgb['cloud_pct']}%)"
         cloud_rule = f"{summary_rule['cloud_count']} task ({summary_rule['cloud_pct']}%)"
+        
+        corr_xgb = f"{summary_xgb['correct_count']} task ({summary_xgb['correct_pct']}%)"
+        corr_rule = f"{summary_rule['correct_count']} task ({summary_rule['correct_pct']}%)"
+        wrong_xgb = f"{summary_xgb['wrong_count']} task ({summary_xgb['wrong_pct']}%)"
+        wrong_rule = f"{summary_rule['wrong_count']} task ({summary_rule['wrong_pct']}%)"
+        acc_xgb = f"{summary_xgb['correct_pct']}%"
+        acc_rule = f"{summary_rule['correct_pct']}%"
+
         p50_xgb = f"{summary_xgb['p50_ms']} ms"
         p50_rule = f"{summary_rule['p50_ms']} ms"
         p90_xgb = f"{summary_xgb['p90_ms']} ms"
@@ -350,20 +399,25 @@ def main():
         mcpu_xgb = f"{summary_xgb['max_cpu']}%"
         mcpu_rule = f"{summary_rule['max_cpu']}%"
 
-        print(f"{'Total Transaksi Selesai':<35} | {summary_xgb['total']:<35} | {summary_rule['total']:<35}")
-        print(f"{'Waktu Eksekusi Total (detik)':<35} | {summary_xgb['duration_sec']:<35} | {summary_rule['duration_sec']:<35}")
-        print(f"{'Throughput (TPS)':<35} | {tps_xgb:<35} | {tps_rule:<35}")
-        print(f"{'Rasio Beban Tetap di Edge':<35} | {edge_xgb:<35} | {edge_rule:<35}")
-        print(f"{'Rasio Beban Migrasi ke Cloud':<35} | {cloud_xgb:<35} | {cloud_rule:<35}")
-        print(f"{'Median Latensi P50 (ms)':<35} | {p50_xgb:<35} | {p50_rule:<35}")
-        print(f"{'P90 Latensi (ms)':<35} | {p90_xgb:<35} | {p90_rule:<35}")
-        print(f"{'P95 Latensi (ms)':<35} | {p95_xgb:<35} | {p95_rule:<35}")
-        print(f"{'P99 Latensi (ms)':<35} | {p99_xgb:<35} | {p99_rule:<35}")
-        print(f"{'Rata-rata Eksekusi Edge (ms)':<35} | {avge_xgb:<35} | {avge_rule:<35}")
-        print(f"{'Rata-rata Migrasi Cloud (ms)':<35} | {avgc_xgb:<35} | {avgc_rule:<35}")
-        print(f"{'Rata-rata Beban CPU Pi 5 (%)':<35} | {cpu_xgb:<35} | {cpu_rule:<35}")
-        print(f"{'Puncak Beban CPU Pi 5 (%)':<35} | {mcpu_xgb:<35} | {mcpu_rule:<35}")
-        print("="*115)
+        print(f"{'Total Transaksi Selesai':<35} | {summary_xgb['total']:<40} | {summary_rule['total']:<40}")
+        print(f"{'Waktu Eksekusi Total (detik)':<35} | {summary_xgb['duration_sec']:<40} | {summary_rule['duration_sec']:<40}")
+        print(f"{'Throughput (TPS)':<35} | {tps_xgb:<40} | {tps_rule:<40}")
+        print(f"{'Rasio Beban Tetap di Edge':<35} | {edge_xgb:<40} | {edge_rule:<40}")
+        print(f"{'Rasio Beban Migrasi ke Cloud':<35} | {cloud_xgb:<40} | {cloud_rule:<40}")
+        print("-" * 125)
+        print(f"{'Hasil Pengenalan BENAR [V]':<35} | {corr_xgb:<40} | {corr_rule:<40}")
+        print(f"{'Hasil Pengenalan SALAH [X]':<35} | {wrong_xgb:<40} | {wrong_rule:<40}")
+        print(f"{'Tingkat Akurasi Wajah (%)':<35} | {acc_xgb:<40} | {acc_rule:<40}")
+        print("-" * 125)
+        print(f"{'Median Latensi P50 (ms)':<35} | {p50_xgb:<40} | {p50_rule:<40}")
+        print(f"{'P90 Latensi (ms)':<35} | {p90_xgb:<40} | {p90_rule:<40}")
+        print(f"{'P95 Latensi (ms)':<35} | {p95_xgb:<40} | {p95_rule:<40}")
+        print(f"{'P99 Latensi (ms)':<35} | {p99_xgb:<40} | {p99_rule:<40}")
+        print(f"{'Rata-rata Eksekusi Edge (ms)':<35} | {avge_xgb:<40} | {avge_rule:<40}")
+        print(f"{'Rata-rata Migrasi Cloud (ms)':<35} | {avgc_xgb:<40} | {avgc_rule:<40}")
+        print(f"{'Rata-rata Beban CPU Pi 5 (%)':<35} | {cpu_xgb:<40} | {cpu_rule:<40}")
+        print(f"{'Puncak Beban CPU Pi 5 (%)':<35} | {mcpu_xgb:<40} | {mcpu_rule:<40}")
+        print("="*125)
 
 if __name__ == "__main__":
     main()
