@@ -57,9 +57,9 @@ FACE_PROFILES = [
         "path": "/home/pi/penlock/software/Django-Backend-Project/media/imagetraining/soqisoqi/soqi_10_20251216_162141_427841.jpg"
     },
     {
-        "name": "Loker Cam (Akmal)",
+        "name": "Akmal (Foto 2)",
         "valid_aliases": ["akmal"],
-        "path": "/home/pi/penlock/test_camera.jpg"
+        "path": "/home/pi/penlock/software/Django-Backend-Project/media/imagetraining/akmal/akmal_sync_1791526198_1.jpg"
     }
 ]
 

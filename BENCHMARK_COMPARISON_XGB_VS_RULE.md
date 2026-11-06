@@ -62,7 +62,7 @@ Pengujian tidak menggunakan data dummy, melainkan merotasi 5 foto riil pengguna 
 | 2 | **Iqbal (balbal)** | `software/Django-Backend-Project/media/imagetraining/balbal/iqbal_1_...jpg` | 78 KB | Pemilik Sah (ID: 451699) |
 | 3 | **Shafwan (panpenlok)** | `software/Django-Backend-Project/media/imagetraining/panpenlok/pan_1_...jpg` | 75 KB | Pemilik Sah (ID: 249731) |
 | 4 | **Syauqi (soqisoqi)** | `software/Django-Backend-Project/media/imagetraining/soqisoqi/soqi_10_...jpg` | 70 KB | Pemilik Sah (ID: 619292) |
-| 5 | **Loker Cam (Real)** | `test_camera.jpg` (Snapshot Webcam Logitech C270) | 39 KB | Sampel Kamera Loker |
+| 5 | **Akmal (Foto 2)** | `software/Django-Backend-Project/media/imagetraining/akmal/akmal_sync_1791526198_1.jpg` | 229 KB | Pemilik Sah (ID: 789123) |
 
 ---
 
