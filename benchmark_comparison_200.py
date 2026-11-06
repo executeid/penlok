@@ -1,10 +1,13 @@
 #!/usr/bin/env python3
 """
-PENLOK Head-to-Head Comparative Benchmark:
-Algorithm 1: XGBoost (Dynamic Machine Learning Scheduler at 10.1.1.57:8500)
-Algorithm 2: Rule-Based (Deterministic Static Thresholds Baseline)
-Total Requests: 200 per algorithm
-Concurrency: 4 workers
+PENLOK Configurable Comparative Load Benchmark:
+Compares:
+  - Algorithm 1: XGBoost (Dynamic Machine Learning Classifier at 10.1.1.57:8500)
+  - Algorithm 2: Rule-Based (Deterministic Static Thresholds Baseline)
+Configurable:
+  - Total requests: -t / --total (default: 200)
+  - Concurrency: -c / --conn / --concurrency (default: 4)
+  - Algorithm mode: -a / --algo (both / xgboost / rule_based, default: both)
 Dataset: Real 5-People Face Profiles (Akmal, Iqbal, Shafwan, Syauqi, Loker Cam)
 Live per-request log streaming enabled.
 """
@@ -13,6 +16,7 @@ import sys
 import os
 import time
 import math
+import argparse
 import statistics
 import threading
 from concurrent.futures import ThreadPoolExecutor
@@ -23,9 +27,9 @@ import migration_agent as ma
 import psutil
 import requests
 
-# Optimization: use requests.Session for connection reuse and 2.5s timeout
+# Connection pooling for high-throughput benchmark stability
 sched_session = requests.Session()
-adapter = requests.adapters.HTTPAdapter(pool_connections=10, pool_maxsize=20)
+adapter = requests.adapters.HTTPAdapter(pool_connections=20, pool_maxsize=50)
 sched_session.mount("http://", adapter)
 
 FACE_PROFILES = [
@@ -111,12 +115,12 @@ def evaluate_decision(algo_mode: str, telemetry: dict):
             if r.status_code == 200:
                 data = r.json()
                 return data.get("decision", 0), data.get("confidence", 0.95), "xgboost"
-        except Exception as e:
+        except Exception:
             pass
         return 0, 0.5, "fallback_edge"
 
     elif algo_mode == "Rule-Based":
-        # Baseline rules from PRD & scheduler report:
+        # Baseline rules:
         # 1. CPU > 80% -> Cloud (1)
         # 2. CPU > 65% & RAM_pct > 70% & Latency < 150ms -> Cloud (1)
         # 3. Active Queue > 5 -> Cloud (1)
@@ -193,7 +197,7 @@ def execute_single_task(req_id: int, total_requests: int, person_data: dict, alg
     with print_lock:
         dec_tag = "CLOUD [>>]" if decision == 1 else "EDGE  [--]"
         print(
-            f"[{now_str}] #{req_id:03d}/200 | {algo_mode:10s} | {person_data['name']:18s} | "
+            f"[{now_str}] #{req_id:03d}/{total_requests:03d} | {algo_mode:10s} | {person_data['name']:18s} | "
             f"CPU:{cpu_now:4.1f}% Q:{q_depth:02d} | {dec_tag} -> {exec_node:17s} | "
             f"{dur_ms:6.1f}ms | User: {user_display:11s} ({conf_pct:2d}%)",
             flush=True
@@ -209,7 +213,7 @@ def execute_single_task(req_id: int, total_requests: int, person_data: dict, alg
         "conf": confidence
     }
 
-def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req=200, concurrency=4):
+def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req: int, concurrency: int):
     n_profiles = len(profiles)
     print("\n" + "="*115)
     print(f"  MEMULAI PENGUJIAN: ALGORITMA {algo_name.upper()}")
@@ -228,7 +232,7 @@ def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req=200, c
         for i in range(total_req):
             person = profiles[i % n_profiles]
             futures.append(executor.submit(execute_single_task, i+1, total_req, person, algo_name, concurrency))
-            time.sleep(0.01) # Stagger arrival slightly
+            time.sleep(0.01) # Small jitter
         results = [f.result() for f in futures]
     wall_duration = time.perf_counter() - wall_t0
 
@@ -283,65 +287,83 @@ def run_benchmark_for_algorithm(algo_name: str, profiles: list, total_req=200, c
     return summary
 
 def main():
+    parser = argparse.ArgumentParser(
+        description="PENLOK Configurable Comparative Load Benchmark: XGBoost vs Rule-Based",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter
+    )
+    parser.add_argument("-t", "--total", type=int, default=200, help="Total request yang dieksekusi per algoritma")
+    parser.add_argument("-c", "--conn", "--concurrency", dest="conn", type=int, default=4, help="Jumlah worker bersamaan (concurrency)")
+    parser.add_argument("-a", "--algo", choices=["both", "xgboost", "rule_based"], default="both", help="Pilihan algoritma pengujian")
+    parser.add_argument("--cooldown", type=float, default=3.0, help="Durasi jeda thermal recovery antar pengujian (detik)")
+
+    args = parser.parse_args()
+
     print("="*115)
-    print("  PENLOK COMPARATIVE BENCHMARK: XGBOOST VS RULE-BASED")
-    print("  Total Requests: 200 per algoritma | Concurrency: 4 workers | Total: 400 Transaksi Riil")
+    print("  PENLOK CONFIGURABLE LOAD BENCHMARK")
+    print(f"  Parameter: Total={args.total} req/algo | Concurrency={args.conn} workers | Mode={args.algo.upper()}")
     print("="*115)
 
     profiles = load_face_data()
 
-    # 1. RUN ALGORITMA 1: XGBOOST
-    summary_xgb = run_benchmark_for_algorithm("XGBoost", profiles, total_req=200, concurrency=4)
+    summaries = {}
 
-    print("\n[COOLING] Thermal recovery & socket cooldown (3 detik)...")
-    time.sleep(3.0)
+    if args.algo in ("both", "xgboost"):
+        summaries["XGBoost"] = run_benchmark_for_algorithm("XGBoost", profiles, total_req=args.total, concurrency=args.conn)
 
-    # 2. RUN ALGORITMA 2: RULE-BASED
-    summary_rule = run_benchmark_for_algorithm("Rule-Based", profiles, total_req=200, concurrency=4)
+    if args.algo == "both":
+        print(f"\n[COOLING] Thermal recovery & socket cooldown ({args.cooldown:.1f} detik)...")
+        time.sleep(args.cooldown)
 
-    # 3. PRINT HEAD-TO-HEAD COMPARISON TABLE
-    print("\n" + "="*115)
-    print("  TABEL PERBANDINGAN HEAD-TO-HEAD: XGBOOST VS RULE-BASED (TOTAL 200 REQ, CONCURRENCY 4)")
-    print("="*115)
-    print(f"{'Metrik Pengujian':<35} | {'XGBoost (ML Classifier)':<35} | {'Rule-Based (Baseline)':<35}")
-    print("-" * 115)
-    tps_xgb = f"{summary_xgb['tps']} req/s"
-    tps_rule = f"{summary_rule['tps']} req/s"
-    edge_xgb = f"{summary_xgb['edge_count']} task ({summary_xgb['edge_pct']}%)"
-    edge_rule = f"{summary_rule['edge_count']} task ({summary_rule['edge_pct']}%)"
-    cloud_xgb = f"{summary_xgb['cloud_count']} task ({summary_xgb['cloud_pct']}%)"
-    cloud_rule = f"{summary_rule['cloud_count']} task ({summary_rule['cloud_pct']}%)"
-    p50_xgb = f"{summary_xgb['p50_ms']} ms"
-    p50_rule = f"{summary_rule['p50_ms']} ms"
-    p90_xgb = f"{summary_xgb['p90_ms']} ms"
-    p90_rule = f"{summary_rule['p90_ms']} ms"
-    p95_xgb = f"{summary_xgb['p95_ms']} ms"
-    p95_rule = f"{summary_rule['p95_ms']} ms"
-    p99_xgb = f"{summary_xgb['p99_ms']} ms"
-    p99_rule = f"{summary_rule['p99_ms']} ms"
-    avge_xgb = f"{summary_xgb['avg_edge_ms']} ms"
-    avge_rule = f"{summary_rule['avg_edge_ms']} ms"
-    avgc_xgb = f"{summary_xgb['avg_cloud_ms']} ms"
-    avgc_rule = f"{summary_rule['avg_cloud_ms']} ms"
-    cpu_xgb = f"{summary_xgb['avg_cpu']}%"
-    cpu_rule = f"{summary_rule['avg_cpu']}%"
-    mcpu_xgb = f"{summary_xgb['max_cpu']}%"
-    mcpu_rule = f"{summary_rule['max_cpu']}%"
+    if args.algo in ("both", "rule_based"):
+        summaries["Rule-Based"] = run_benchmark_for_algorithm("Rule-Based", profiles, total_req=args.total, concurrency=args.conn)
 
-    print(f"{'Total Transaksi Selesai':<35} | {summary_xgb['total']:<35} | {summary_rule['total']:<35}")
-    print(f"{'Waktu Eksekusi Total (detik)':<35} | {summary_xgb['duration_sec']:<35} | {summary_rule['duration_sec']:<35}")
-    print(f"{'Throughput (TPS)':<35} | {tps_xgb:<35} | {tps_rule:<35}")
-    print(f"{'Rasio Beban Tetap di Edge':<35} | {edge_xgb:<35} | {edge_rule:<35}")
-    print(f"{'Rasio Beban Migrasi ke Cloud':<35} | {cloud_xgb:<35} | {cloud_rule:<35}")
-    print(f"{'Median Latensi P50 (ms)':<35} | {p50_xgb:<35} | {p50_rule:<35}")
-    print(f"{'P90 Latensi (ms)':<35} | {p90_xgb:<35} | {p90_rule:<35}")
-    print(f"{'P95 Latensi (ms)':<35} | {p95_xgb:<35} | {p95_rule:<35}")
-    print(f"{'P99 Latensi (ms)':<35} | {p99_xgb:<35} | {p99_rule:<35}")
-    print(f"{'Rata-rata Eksekusi Edge (ms)':<35} | {avge_xgb:<35} | {avge_rule:<35}")
-    print(f"{'Rata-rata Migrasi Cloud (ms)':<35} | {avgc_xgb:<35} | {avgc_rule:<35}")
-    print(f"{'Rata-rata Beban CPU Pi 5 (%)':<35} | {cpu_xgb:<35} | {cpu_rule:<35}")
-    print(f"{'Puncak Beban CPU Pi 5 (%)':<35} | {mcpu_xgb:<35} | {mcpu_rule:<35}")
-    print("="*115)
+    # Print comparison table if both ran
+    if "XGBoost" in summaries and "Rule-Based" in summaries:
+        summary_xgb = summaries["XGBoost"]
+        summary_rule = summaries["Rule-Based"]
+
+        print("\n" + "="*115)
+        print(f"  TABEL PERBANDINGAN HEAD-TO-HEAD: XGBOOST VS RULE-BASED (TOTAL {args.total} REQ, CONCURRENCY {args.conn})")
+        print("="*115)
+        print(f"{'Metrik Pengujian':<35} | {'XGBoost (ML Classifier)':<35} | {'Rule-Based (Baseline)':<35}")
+        print("-" * 115)
+        tps_xgb = f"{summary_xgb['tps']} req/s"
+        tps_rule = f"{summary_rule['tps']} req/s"
+        edge_xgb = f"{summary_xgb['edge_count']} task ({summary_xgb['edge_pct']}%)"
+        edge_rule = f"{summary_rule['edge_count']} task ({summary_rule['edge_pct']}%)"
+        cloud_xgb = f"{summary_xgb['cloud_count']} task ({summary_xgb['cloud_pct']}%)"
+        cloud_rule = f"{summary_rule['cloud_count']} task ({summary_rule['cloud_pct']}%)"
+        p50_xgb = f"{summary_xgb['p50_ms']} ms"
+        p50_rule = f"{summary_rule['p50_ms']} ms"
+        p90_xgb = f"{summary_xgb['p90_ms']} ms"
+        p90_rule = f"{summary_rule['p90_ms']} ms"
+        p95_xgb = f"{summary_xgb['p95_ms']} ms"
+        p95_rule = f"{summary_rule['p95_ms']} ms"
+        p99_xgb = f"{summary_xgb['p99_ms']} ms"
+        p99_rule = f"{summary_rule['p99_ms']} ms"
+        avge_xgb = f"{summary_xgb['avg_edge_ms']} ms"
+        avge_rule = f"{summary_rule['avg_edge_ms']} ms"
+        avgc_xgb = f"{summary_xgb['avg_cloud_ms']} ms"
+        avgc_rule = f"{summary_rule['avg_cloud_ms']} ms"
+        cpu_xgb = f"{summary_xgb['avg_cpu']}%"
+        cpu_rule = f"{summary_rule['avg_cpu']}%"
+        mcpu_xgb = f"{summary_xgb['max_cpu']}%"
+        mcpu_rule = f"{summary_rule['max_cpu']}%"
+
+        print(f"{'Total Transaksi Selesai':<35} | {summary_xgb['total']:<35} | {summary_rule['total']:<35}")
+        print(f"{'Waktu Eksekusi Total (detik)':<35} | {summary_xgb['duration_sec']:<35} | {summary_rule['duration_sec']:<35}")
+        print(f"{'Throughput (TPS)':<35} | {tps_xgb:<35} | {tps_rule:<35}")
+        print(f"{'Rasio Beban Tetap di Edge':<35} | {edge_xgb:<35} | {edge_rule:<35}")
+        print(f"{'Rasio Beban Migrasi ke Cloud':<35} | {cloud_xgb:<35} | {cloud_rule:<35}")
+        print(f"{'Median Latensi P50 (ms)':<35} | {p50_xgb:<35} | {p50_rule:<35}")
+        print(f"{'P90 Latensi (ms)':<35} | {p90_xgb:<35} | {p90_rule:<35}")
+        print(f"{'P95 Latensi (ms)':<35} | {p95_xgb:<35} | {p95_rule:<35}")
+        print(f"{'P99 Latensi (ms)':<35} | {p99_xgb:<35} | {p99_rule:<35}")
+        print(f"{'Rata-rata Eksekusi Edge (ms)':<35} | {avge_xgb:<35} | {avge_rule:<35}")
+        print(f"{'Rata-rata Migrasi Cloud (ms)':<35} | {avgc_xgb:<35} | {avgc_rule:<35}")
+        print(f"{'Rata-rata Beban CPU Pi 5 (%)':<35} | {cpu_xgb:<35} | {cpu_rule:<35}")
+        print(f"{'Puncak Beban CPU Pi 5 (%)':<35} | {mcpu_xgb:<35} | {mcpu_rule:<35}")
+        print("="*115)
 
 if __name__ == "__main__":
     main()
