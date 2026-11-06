@@ -35,6 +35,7 @@ ${SCP_CMD} \
     /home/execute/penlok/edge_package/Dockerfile.edge-hardware-daemon \
     /home/execute/penlok/edge_package/decision_syncer.py \
     /home/execute/penlok/edge_package/edge_mas_controller.py \
+    /home/execute/penlok/servo_config.json \
     ${TARGET_USER}@${TARGET_HOST}:/home/pi/penlock/
 
 echo "[3/4] Building and launching Edge containers..."

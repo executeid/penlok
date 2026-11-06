@@ -203,25 +203,52 @@ def trigger_relay_safe(relay_id, duration=2.5):
         r.off()
         print(f"[ACTUATOR] Relay {relay_id} de-energized safely.")
 
+def load_servo_config():
+    cfg_file = os.path.join(CURRENT_DIR, "servo_config.json")
+    if os.path.exists(cfg_file):
+        try:
+            import json
+            with open(cfg_file, "r") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {
+        "open_position": {"servo_left_value": -1.0, "servo_right_value": 1.0, "duration_sec": 0.45},
+        "closed_position": {"servo_left_value": 1.0, "servo_right_value": -1.0, "duration_sec": 0.5}
+    }
+
 def run_trapdoor_cycle():
-    """Actuate dual servos for parcel transfer from Locker 1 to Locker 2"""
+    """Actuate dual servos for parcel transfer from Locker 1 to Locker 2 using calibrated config"""
     print("[SERVO] Running trapdoor cycle (GPIO 12 & 13)...")
+    cfg = load_servo_config()
+    op = cfg.get("open_position", {})
+    cl = cfg.get("closed_position", {})
     s_left = None
     s_right = None
     try:
         s_left = Servo(SERVO_LEFT_PIN)
         s_right = Servo(SERVO_RIGHT_PIN)
-        # Open
-        s_left.value = -1
-        s_right.value = 1
-        time.sleep(0.45)
+        # 1. Open
+        val_l_open = op.get("servo_left_value", -1.0)
+        val_r_open = op.get("servo_right_value", 1.0)
+        dur_open = op.get("duration_sec", 0.45)
+        print(f"  -> Opening: Left={val_l_open}, Right={val_r_open} ({dur_open}s)")
+        s_left.value = val_l_open
+        s_right.value = val_r_open
+        time.sleep(dur_open)
         s_left.detach()
         s_right.detach()
+
         time.sleep(1.5)
-        # Close
-        s_left.value = 1
-        s_right.value = -1
-        time.sleep(0.5)
+
+        # 2. Close
+        val_l_close = cl.get("servo_left_value", 1.0)
+        val_r_close = cl.get("servo_right_value", -1.0)
+        dur_close = cl.get("duration_sec", 0.5)
+        print(f"  -> Closing: Left={val_l_close}, Right={val_r_close} ({dur_close}s)")
+        s_left.value = val_l_close
+        s_right.value = val_r_close
+        time.sleep(dur_close)
         s_left.detach()
         s_right.detach()
         print("[SERVO] Trapdoor cycle completed.")

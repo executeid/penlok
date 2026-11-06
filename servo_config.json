@@ -1,0 +1,17 @@
+{
+  "servo_left_pin": 13,
+  "servo_right_pin": 12,
+  "closed_position": {
+    "description": "Posisi tertutup saat ini (Baseline tercatat)",
+    "servo_left_value": 1.0,
+    "servo_right_value": -1.0,
+    "duration_sec": 0.5,
+    "recorded_at": "2026-11-06"
+  },
+  "open_position": {
+    "description": "Posisi terbuka (dapat disesuaikan hasil kalibrasi)",
+    "servo_left_value": -1.0,
+    "servo_right_value": 1.0,
+    "duration_sec": 0.45
+  }
+}
