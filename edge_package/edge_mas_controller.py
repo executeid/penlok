@@ -368,7 +368,7 @@ def verify_owner_access(hw=None, lcd=None, force_decision=None, test_image_bytes
     print("  [MAS] MEMULAI PROSES AUTENTIKASI PEMILIK (LOCKER 2)")
     print("="*60)
 
-    lcd_write_lines("Autentikasi Wajah", "Tatap Kamera...", "Evaluasi AI MAS...", "Mohon Tunggu...")
+    lcd_write_lines("Kamera Aktif...", "Tatap Lensa Kamera", "Mengambil Foto...", "Mohon Tunggu...")
 
     frame_bytes = test_image_bytes or capture_camera_frame()
     if not frame_bytes:
@@ -419,12 +419,17 @@ def verify_owner_access(hw=None, lcd=None, force_decision=None, test_image_bytes
 
     if authorized:
         print(f"[+] AKSES DITERIMA: {user_id}")
-        lcd_write_lines("AKSES DITERIMA!", f"Halo, {user_id}"[:20], "Membuka Loker 2", "Silakan Buka Pintu")
+        conf_pct = int(confidence * 100) if confidence else 95
+        lcd_write_lines("AKSES DITERIMA!", f"{user_id} ({conf_pct}%)"[:20], "Loker 2 Terbuka", "Silakan Buka Pintu")
         trigger_relay_safe(2, duration=2.5)
         return True
     else:
         print(f"[-] AKSES DITOLAK: {user_id}")
-        lcd_write_lines("AKSES DITOLAK!", "Wajah Tdk Cocok", "Bukan Pemilik", "Coba Lagi")
+        if user_id == "NO_FACE_DETECTED":
+            lcd_write_lines("TIDAK ADA WAJAH!", "Wajah Tdk Terlihat", "Hadap ke Kamera", "Coba Lagi")
+        else:
+            conf_pct = int(confidence * 100) if confidence else 0
+            lcd_write_lines("AKSES DITOLAK!", "Bukan Pemilik Sah", f"Skor: {conf_pct}% (<60%)"[:20], "Coba Lagi")
         beep_denied()
         return False
 
@@ -514,10 +519,12 @@ def handle_key_event(key_char):
             print("[STATE] Entered STATE_INPUT_OTP")
             lcd_write_lines("Ambil Paket", "Ketik 6 Digit OTP:", "> ______", "#=Buka   *=Batal")
 
-        elif key_char in ('O', 'o'):
-            # Keyboard letter 'O' triggers Owner Face Auth
+        elif key_char in ('0', 'O', 'o'):
+            # Keypad number '0' OR keyboard letter 'O' triggers Camera Face Check!
+            print("[KEYPAD] Menu 0 selected: Triggering Camera Face Recognition!")
+            beep_short()
             verify_owner_access()
-            time.sleep(1.5)
+            time.sleep(2.5)
             show_standby_screen()
 
         elif key_char in '0123456789':
