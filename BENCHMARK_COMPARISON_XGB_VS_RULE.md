@@ -104,6 +104,8 @@ flowchart TD
         R2 -->|"Langsung Terpicu Rule 1"| R3["63.0% Dimigrasikan ke Cloud GPU"]
         R3 --> R4["Beban Pi 5 Cepat Berkurang\nLatensi P50 Sangat Kilat: 61.3 ms\nThroughput Tinggi: 26.62 req/s"]
     end
+
+    X4 ~~~ R1
 ```
 
 ### 5.1 Karakteristik XGBoost: *Network-Conservative & Edge-Centric*
