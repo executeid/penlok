@@ -75,9 +75,14 @@ KEYPAD_MATRIX = [
     ['*', '0', '#'],
 ]
 
-# Remote Microservice Endpoints
-SCHEDULER_URL = os.getenv("SCHEDULER_URL", "http://10.1.1.57:8500/api/v1/schedule")
-CLOUD_GPU_URL = os.getenv("CLOUD_GPU_URL", "http://10.1.1.186:9000/api/v1/migration")
+# Remote Microservice Endpoints (Tailscale primary with LAN fallback)
+SCHEDULER_HOST = os.getenv("SCHEDULER_HOST", "100.75.230.102")
+SCHEDULER_PORT = os.getenv("SCHEDULER_PORT", "8500")
+SCHEDULER_URL = os.getenv("SCHEDULER_URL", f"http://{SCHEDULER_HOST}:{SCHEDULER_PORT}/api/v1/schedule")
+
+CLOUD_HOST = os.getenv("CLOUD_HOST", "100.76.68.93")
+CLOUD_PORT = os.getenv("CLOUD_PORT", "9000")
+CLOUD_GPU_URL = os.getenv("CLOUD_GPU_URL", f"http://{CLOUD_HOST}:{CLOUD_PORT}/api/v1/migration")
 
 # Local Model Paths
 HAAR_CASCADE_PATH = "/home/pi/penlock/pyenv3.9code/nonsudo/haarcascade_frontalface_default.xml"

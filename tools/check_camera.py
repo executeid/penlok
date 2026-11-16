@@ -67,7 +67,8 @@ def take_snapshot():
         from migration_agent import dispatch_migration
         _, buf = cv2.imencode(".jpg", frame)
         print("\n[AI] Menguji pencocokan ke Cloud GPU (RTX 3050 CUDA)...")
-        res = dispatch_migration("CHECK_CAM", "SB01", buf.tobytes(), decision=1, cloud_url="http://10.1.1.186:9000/api/v1/migration")
+        cloud_url = os.getenv("CLOUD_GPU_URL", "http://100.76.68.93:9000/api/v1/migration")
+        res = dispatch_migration("CHECK_CAM", "SB01", buf.tobytes(), decision=1, cloud_url=cloud_url)
         print(f"     Hasil Cloud GPU : User = {res.get('user_id')}")
         print(f"     Status          : {'TERVERIFIKASI (Cocok)' if res.get('authorized') else 'DITOLAK (Bukan Pemilik / Wajah Belum Jelas)'}")
         print(f"     Skor Kemiripan  : {res.get('confidence')} (Ambang batas: >= 0.60)")
@@ -84,7 +85,7 @@ def run_live_web_stream(port=8088):
     print("\n" + "="*60)
     print(f"  PENLOK LIVE CAMERA STREAMER (PORT {port})")
     print("="*60)
-    print(f"Buka di browser: http://10.1.1.224:{port}/")
+    print(f"Buka di browser: http://100.66.41.38:{port}/ (atau via LAN lemari)")
     print("Tekan Ctrl+C di terminal ini untuk berhenti.\n")
 
     class CamHandler(BaseHTTPRequestHandler):

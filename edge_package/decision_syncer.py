@@ -19,9 +19,9 @@ WIB = zoneinfo.ZoneInfo("Asia/Jakarta")
 def now_wib_str():
     return datetime.now(WIB).strftime("%Y-%m-%d %H:%M:%S")
 
-CLOUD_HOST = os.getenv("CLOUD_HOST", "10.1.1.186")
+CLOUD_HOST = os.getenv("CLOUD_HOST", "100.76.68.93")
 CLOUD_PORT = os.getenv("CLOUD_PORT", "9000")
-CLOUD_FALLBACK = os.getenv("CLOUD_HOST_FALLBACK", "100.76.68.93")
+CLOUD_FALLBACK = os.getenv("CLOUD_HOST_FALLBACK", "10.1.1.186")
 DB_BUFFER_PATH = os.getenv("SQLITE_BUFFER_PATH", "/home/pi/penlock/data/edge_decision_buffer.db")
 
 PRIMARY_CLOUD_URL = f"http://{CLOUD_HOST}:{CLOUD_PORT}"

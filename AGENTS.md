@@ -15,7 +15,7 @@ Arsitektur sistem membagi beban komputasi secara dinamis antara **Edge** (Raspbe
 
 | Peran Node | Hostname / IP LAN | IP Tailscale | Akun & Kredensial | Tugas Utama |
 |---|---|---|---|---|
-| **Device Edge (Loker)** | `10.1.1.224:2523` | `100.75.230.102` | `pi` (RPi 5 8GB, Linux 6.12 aarch64) | Kontrol aktuator (Relay, Servo, Keypad, LCD, Kamera, Ultrasonik). Daemon Docker: `edge-hardware-daemon`, `edge-gateway-sync`. |
+| **Device Edge (Loker)** | `10.1.1.224:2523` | `100.66.41.38` | `pi` (RPi 5 8GB, Linux 6.12 aarch64) | Kontrol aktuator (Relay, Servo, Keypad, LCD, Kamera, Ultrasonik). Daemon Docker: `edge-hardware-daemon`, `edge-gateway-sync`. |
 | **Edge Brain / Scheduler** | `10.1.1.57:22` | `100.112.209.30` | `penlok` (sudo: `123`) (RPi 5 16GB, K3s) | Scheduler Agent FastAPI (Port 8500), model XGBoost perutean komputasi Cloud vs Edge. |
 | **Cloud GPU Node** | `10.1.1.186:22` | `100.76.68.93` | `tcc` (sudo: `jawir`) / `penlok` (`pengmas-tri`, Ubuntu 24.04 x86_64) | NVIDIA RTX 3050 6GB CUDA 13.2, FastAPI Cloud Agent (Port 9000), FaceNet 512-d embeddings, database cloud PostgreSQL. |
 | **Development Host** | `localhost` | - | `execute` (`/home/execute/penlok`) | Repository source code, testing scripts, deployment control. |

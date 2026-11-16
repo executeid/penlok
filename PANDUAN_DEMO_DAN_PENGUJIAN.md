@@ -10,7 +10,7 @@ Sistem PENLOK terdiri dari 3 node terdistribusi yang bekerja secara tersinkronis
 
 | Peran Node | Perangkat Fisik | Alamat IP / Host | Akses & Tugas |
 |---|---|---|---|
-| **Device Edge (Lemari Fisik)** | Raspberry Pi 5 (8 GB) | `10.1.1.224:2523` (Jump: `penlok@100.75.230.102`) | Kontrol hardware: Keypad 3x4, LCD I2C, Webcam C270, Ultrasonic HC-SR04, Servo trapdoor MG996R, 4 Solenoid Relay. |
+| **Device Edge (Lemari Fisik)** | Raspberry Pi 5 (8 GB) | `100.66.41.38:2523` (LAN: `10.1.1.224`) | Kontrol hardware: Keypad 3x4, LCD I2C, Webcam C270, Ultrasonic HC-SR04, Servo trapdoor MG996R, 4 Solenoid Relay. |
 | **Edge Brain / Scheduler** | Raspberry Pi 5 (16 GB) | `10.1.1.57:8500` (Tailscale: `100.75.230.102`) | Otak penjadwalan MAS: Menjalankan model XGBoost 7-fitur telemetri untuk menentukan apakah inferensi diproses di Edge (`0`) atau dialihkan ke Cloud GPU (`1`). |
 | **Cloud GPU Node** | Server PC Ubuntu 24.04 (RTX 3050 6GB CUDA) | `10.1.1.186:9000` (Tailscale: `100.76.68.93`) | Eksekutor inferensi berat (YuNet ONNX + InceptionResnetV1 VGGFace2), Basis Data PostgreSQL `mas_decision_history`, dan Web Decision Observatory (`:30080`). |
 

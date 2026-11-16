@@ -134,7 +134,8 @@ class RealTimeSampler:
 def evaluate_decision(algo_mode: str, telemetry: dict):
     if algo_mode == "XGBoost":
         try:
-            r = sched_session.post("http://10.1.1.57:8500/api/v1/schedule", json=telemetry, timeout=2.5)
+            sched_url = os.getenv("SCHEDULER_URL", "http://100.75.230.102:8500/api/v1/schedule")
+            r = sched_session.post(sched_url, json=telemetry, timeout=2.5)
             if r.status_code == 200:
                 data = r.json()
                 return data.get("decision", 0), data.get("confidence", 0.95), "xgboost"
