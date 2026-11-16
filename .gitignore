@@ -1,22 +1,49 @@
+# Byte-compiled / optimized / DLL files
 __pycache__/
-*.pyc
 *.py[cod]
 *$py.class
 *.so
 .Python
+
+# Virtual Environments
 env/
 venv/
 .venv/
-*.tar
-*.tar.gz
+ENV/
+env.bak/
+venv.bak/
+
+# Environment Variables & Secrets (CRITICAL)
+.env
+.env.*
+*.env
+!.env.example
+!*.env.example
+
+# Database & SQLite Buffers
 *.db
 *.sqlite3
-/cloud/.env
-/cloud/evidence/private/
+/cloud_task_log.db
+
+# Heavy Models & Binary Checkpoints
 /checkpoints/
 /gallery/
 /gallery_embeddings.pt
 /face_detection_yunet_2023mar.onnx
-/cloud_task_log.db
+/cloud/evidence/private/
+*.tar
+*.tar.gz
+
+# Operating System & IDE artifacts
 .DS_Store
 Thumbs.db
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Node / Frontend artifacts
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*

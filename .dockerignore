@@ -1,3 +1,8 @@
+# Environment and Secret Files
+.env
+.env.*
+*.env
+
 software/
 coba/
 penlock/
@@ -12,5 +17,4 @@ __pycache__/
 gallery/
 gallery_embeddings.pt
 cloud_task_log.db
-cloud/.env
 cloud/evidence/

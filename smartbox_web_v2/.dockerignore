@@ -3,3 +3,6 @@ dist
 .git
 .oxlintrc.json
 *.tar
+.env
+.env.*
+*.env
