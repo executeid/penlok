@@ -63,7 +63,7 @@ Arsitektur sistem membagi beban komputasi secara dinamis antara **Edge** (Raspbe
 2. **Marketplace Pickup (Menu 2 / OTP):**
    - Pembeli memasukkan 6 digit OTP.
    - Sistem validasi OTP -> Solenoid Loker 3 (BCM 6) terbuka.
-3. **Owner Biometric Access (Tombol BCM 16 / Keypad '0'):**
+3. **Owner Biometric Access (Tombol BCM 16 / Keypad '6'):**
    - Kamera USB `/dev/video0` (Logitech C270) memotret frame.
    - Deteksi wajah via **OpenCV YuNet ONNX** (`face_detection_yunet_2023mar.onnx`).
    - Scheduler Agent (`10.1.1.57:8500`) memutuskan rute inferensi (Local Edge vs Cloud GPU).

@@ -28,8 +28,8 @@ Layar LCD pada lemari fisik memberikan umpan balik langsung kepada pengguna:
    ```text
    BoxInAja - Penlok
    4.Kirim   5.Ambil
-   0.Cek Wajah/Kamera
-   Pilih [4 / 5 / 0]:
+   6.Buka Wajah/Kamera
+   Pilih [4 / 5 / 6]:
    ```
 2. **Saat Kurir Input Resi (Menu 4):**
    ```text
@@ -45,7 +45,7 @@ Layar LCD pada lemari fisik memberikan umpan balik langsung kepada pengguna:
    > 104416
    #=Buka   *=Batal
    ```
-4. **Saat Autentikasi Wajah Pemilik (Menu 0 / Tombol BCM 16):**
+4. **Saat Autentikasi Wajah Pemilik (Menu 6 / Tombol BCM 16):**
    ```text
    Kamera Aktif...
    Tatap Lensa Kamera
@@ -117,7 +117,7 @@ Jalankan 3 skenario interaksi fisik ini di hadapan penguji secara berurutan:
 ---
 
 ### Skenario 3: Alur Akses Biometrik Pemilik (Owner Biometric Access)
-1. **Tindakan:** Berdiri di depan kamera lemari, lalu tekan angka **`0`** pada keypad (atau tekan tombol fisik bulat **BCM 16** pada lemari).
+1. **Tindakan:** Berdiri di depan kamera lemari, lalu tekan angka **`6`** pada keypad (atau tekan tombol fisik bulat **BCM 16** pada lemari).
 2. **Proses AI MAS:**
    - Kamera USB Logitech C270 mengambil frame foto wajah.
    - Model AI YuNet mendeteksi koordinat wajah.
@@ -207,7 +207,7 @@ Simpan catatan nomor kode ini saat demonstrasi berlangsung:
 |---|---|---|
 | **Resi Kurir Valid (Menu 4)** | `34444`, `51818`, `66556` | Solenoid 1 (BCM 10) buka $\rightarrow$ Ultrasonik deteksi $\rightarrow$ Trapdoor putar 0.60s. |
 | **OTP Pembeli Valid (Menu 5)** | `104416`, `749674`, `421803` | Solenoid 3 (BCM 6) buka $\rightarrow$ DB status update `COMPLETED`. |
-| **Wajah Terdaftar (Menu 0)** | `Akmal`, `Iqbal`, `Shafwan`, `Syauqi` | YuNet deteksi $\rightarrow$ Solenoid 2 (BCM 9) buka $\rightarrow$ Log terkirim ke Web. |
+| **Wajah Terdaftar (Menu 6)** | `Akmal`, `Iqbal`, `Shafwan`, `Syauqi` | YuNet deteksi $\rightarrow$ Solenoid 2 (BCM 9) buka $\rightarrow$ Log terkirim ke Web. |
 | **Diagnostik Semua Solenoid** | `python3 tools/test_all_solenoids.py A` | Membunyikan semua 4 relay bergantian 1-2-3-4 secara otomatis. |
 | **Diagnostik Servo Trapdoor** | `python3 tools/tweak_servo.py` | Menu interaktif kalibrasi sudut dan pulsa durasi servo MG996R. |
 | **Live Webcam Streaming** | `python3 tools/check_camera.py --stream` | Akses live video stream lemari di `http://10.1.1.224:8088/`. |

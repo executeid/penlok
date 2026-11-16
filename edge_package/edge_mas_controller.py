@@ -487,9 +487,9 @@ def show_standby_screen():
     print("[MENU] Returning to STANDBY screen.")
     lcd_write_lines(
         "BoxInAja - Penlok",
-        "4.Kirim  5.Ambil",
-        "Tombol: Buka Wajah",
-        "Pilih [4] / [5]:"
+        "4.Kirim   5.Ambil",
+        "6.Buka Wajah/Kamera",
+        "Pilih [4 / 5 / 6]:"
     )
 
 def handle_key_event(key_char):
@@ -519,9 +519,9 @@ def handle_key_event(key_char):
             print("[STATE] Entered STATE_INPUT_OTP")
             lcd_write_lines("Ambil Paket", "Ketik 6 Digit OTP:", "> ______", "#=Buka   *=Batal")
 
-        elif key_char in ('0', 'O', 'o'):
-            # Keypad number '0' OR keyboard letter 'O' triggers Camera Face Check!
-            print("[KEYPAD] Menu 0 selected: Triggering Camera Face Recognition!")
+        elif key_char in ('6', 'O', 'o'):
+            # Keypad number '6' OR keyboard letter 'O' triggers Camera Face Check!
+            print("[KEYPAD] Menu 6 selected: Triggering Camera Face Recognition!")
             beep_short()
             verify_owner_access()
             time.sleep(2.5)
@@ -531,7 +531,7 @@ def handle_key_event(key_char):
             # Helpful feedback if user presses other number at standby
             print(f"[STANDBY] Unmapped number '{key_char}' at standby.")
             beep_short()
-            lcd_write_lines("Pilihan Menu:", "Tekan [4] utk Kirim", "Tekan [5] utk Ambil", "Tombol utk Wajah")
+            lcd_write_lines("Pilihan Menu:", "Tekan [4] Kirim", "Tekan [5] Ambil", "Tekan [6] Wajah")
             time.sleep(1.5)
             show_standby_screen()
 
