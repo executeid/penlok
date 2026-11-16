@@ -74,15 +74,31 @@ Arsitektur sistem membagi beban komputasi secara dinamis antara **Edge** (Raspbe
 
 ---
 
-## 5. Skrip & Utilitas Penting di Direktori Ini
+## 5. Struktur Direktori & Utilitas Penting
 
-- `edge_package/edge_mas_controller.py`: Kontroller utama MAS Edge di Raspberry Pi.
-- `servo_config.json`: Konfigurasi posisi dan durasi pulsa servo continuous.
-- `tweak_servo.py`: Utilitas interaktif kalibrasi sudut/durasi servo MG996R.
-- `test_all_solenoids.py`: Skrip diagnostik pengujian 4 solenoid/relay + buzzer (otomatis stop daemon agar tidak bentrok GPIO).
-- `check_camera.py`: Skrip uji kamera USB C270 (snapshot YuNet + live HTTP MJPEG stream di port `8088`).
-- `cloud_app_main_final.py`: Layanan Cloud Agent FastAPI dengan akselerasi GPU CUDA.
-- `migration_agent.py`: Dispatcher offloading & benchmark latensi edge-to-cloud.
+Repo Penlok telah dirapikan ke dalam struktur modular:
+
+- `edge_package/`: Paket deployment Device Edge (Raspberry Pi 5 `10.1.1.224`).
+  - `edge_mas_controller.py`: Kontroller utama MAS Edge di Raspberry Pi.
+  - `decision_syncer.py`: Sinkronisasi & buffer luring SQLite ke Cloud GPU.
+  - `servo_config.json`: Konfigurasi posisi dan durasi pulsa servo continuous.
+  - `deploy_edge.sh`: Skrip otomatisasi build dan deploy Edge container.
+- `scheduler_package/`: Paket deployment Edge Brain Scheduler (RPi 5 `10.1.1.57:8500`).
+  - `main.py`: FastAPI Scheduler XGBoost & fallback rule-based.
+- `cloud_package/`: Paket deployment Cloud GPU Node (RTX 3050 CUDA `10.1.1.186:9000`).
+  - `main.py`: FastAPI Cloud Agent Face Recognition (YuNet + InceptionResnetV1).
+  - `setup_decision_db.py`: Inisialisasi basis data PostgreSQL `mas_decision_history`.
+- `smartbox_web_v2/`: Frontend Decision Observatory UI (React + Vite + Tailwind, port `30080`).
+- `tools/`: Utilitas diagnostik fisik lemari:
+  - `check_camera.py`: Uji webcam YuNet & live HTTP MJPEG stream (port `8088`).
+  - `test_all_solenoids.py`: Uji coba fisik 4 relay solenoid dan buzzer.
+  - `tweak_servo.py`: Kalibrasi interaktif continuous servo MG996R trapdoor.
+  - `register_face.py`: Pendaftaran wajah baru ke galeri embedding.
+- `benchmarks/`: Skrip evaluasi performa MAS & laporan PDF:
+  - `benchmark_comparison.py`: Uji komparasi XGBoost vs Rule-Based (akurasi, latensi, throughput).
+- `tests/`: Skrip pengujian integrasi API dan end-to-end.
+- `docs/`: Spesifikasi (PRD/Design), jurnal penelitian, dan laporan progres.
+- `legacy/`: Arsip aplikasi Laravel lama (`smartbox_web/`) dan versi kode historis.
 
 ---
 

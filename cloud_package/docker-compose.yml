@@ -1,0 +1,31 @@
+services:
+  cloud-face-agent:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: cloud-face-agent:latest
+    container_name: cloud-face-agent
+    restart: unless-stopped
+    ports:
+      - "9000:9000"
+    env_file:
+      - .env
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    environment:
+      - PYTHONUNBUFFERED=1
+      - TZ=Asia/Jakarta
+    volumes:
+      - /usr/share/zoneinfo/Asia/Jakarta:/etc/localtime:ro
+      - ./gallery:/home/penlok/app/gallery
+      - ./gallery_embeddings.pt:/home/penlok/app/gallery_embeddings.pt
+      - ./cloud_task_log.db:/home/penlok/app/cloud_task_log.db
+      - ./main.py:/home/penlok/app/main.py
+      - /home/penlok/.cache/torch:/root/.cache/torch
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [compute, utility]
