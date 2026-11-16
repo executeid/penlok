@@ -4,6 +4,10 @@ Ekosistem Smart Locker cerdas berbasis **Multi-Agent System (MAS)** dan IoT untu
 
 Beban komputasi inferensi biometrik dibagi secara dinamis antara **Device Edge** (Raspberry Pi 5) dan **Cloud GPU** (NVIDIA GeForce RTX 3050 CUDA) melalui pengklasifikasi cerdas **XGBoost**.
 
+> 📌 **Panduan Lengkap Presentasi & Uji Coba Demo:**  
+> Untuk panduan langkah demi langkah demonstrasi fisik lemari, tampilan web observatory, skenario stress testing, dan ringkasan hasil benchmark komparatif, lihat berkas:  
+> 👉 **[`PANDUAN_DEMO_DAN_PENGUJIAN.md`](PANDUAN_DEMO_DAN_PENGUJIAN.md)**
+
 ---
 
 ## 1. Topologi Jaringan & Arsitektur Sistem
