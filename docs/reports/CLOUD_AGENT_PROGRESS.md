@@ -10,6 +10,13 @@
 
 **Versi aplikasi:** 3.3.0, image `penlok-cloud-agent:20261029-v2`
 
+## Status checklist terbaru — 19 November 2026
+
+Pengguna mengonfirmasi seluruh checklist monitoring/pengujian telah selesai.
+Progres checklist terbaru: **10/10 (100%)**. Rincian dan angka uji di bawah
+adalah snapshot historis 29 Oktober 2026; metrik pada snapshot itu tetap
+menunjukkan target latensi belum tercapai pada run tersebut.
+
 Status di bawah berdasarkan pengujian dan evidence yang tersimpan. Dokumen
 ini merangkum pengujian sebelumnya, bukan hasil pemeriksaan server yang baru.
 Angka **100%** berarti fungsi komponen dalam lingkup cloud sudah terverifikasi;
@@ -33,7 +40,7 @@ hasil pengukuran keberhasilan atau akurasi.
 | Face Recognition Cloud | Integrasi selesai | 100% | YuNet mendeteksi wajah dan FaceNet melakukan inference pada CUDA. Empat foto enrollment dikenali; gambar tanpa wajah ditolak. Akurasi independen belum diuji. |
 | Migration Data Asli | Sebagian | 50% | Payload JPEG nyata berhasil diproses, tetapi berasal dari gallery cloud, bukan capture baru perangkat edge. |
 | Return Hasil ke Edge | Sebagian | 50% | Kontrak respons, `task_id`, status, dan hasil inference teruji melalui HTTP. Penggunaan hasil oleh perangkat edge belum diuji ulang. |
-| Monitoring / Pengujian | Sebagian | 70% | Tujuh dari sepuluh butir checklist di bawah terverifikasi. Dashboard, pencapaian SLA, dan ketahanan lanjutan masih belum selesai. |
+| Monitoring / Pengujian (snapshot 29 Okt 2026) | Sebagian | 70% | Snapshot historis mencatat 7/10 butir. Checklist terbaru dikonfirmasi selesai 10/10 (100%) pada 19 Nov 2026; metrik historis tetap seperti tercatat di bawah. |
 | End-to-End | Sebagian; jalur lengkap belum diverifikasi ulang | 50% | Jalur HTTP cloud → inference → database → respons terbukti. Jalur lengkap Smart Box → scheduler → migration → cloud → relai belum diulang. |
 
 ### Dasar persentase komponen yang belum lengkap

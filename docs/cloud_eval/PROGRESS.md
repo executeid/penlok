@@ -1,5 +1,12 @@
 # Progress Cloud Agent — verifikasi 29 Oktober 2026
 
+## Status checklist terbaru — 19 November 2026
+
+Pengguna mengonfirmasi seluruh checklist monitoring/pengujian telah selesai:
+**10/10 (100%)**. Tabel dan evidence di bawah merupakan snapshot historis
+29 Oktober 2026. Angka latensi pada snapshot itu tetap mencatat target belum
+tercapai pada run tersebut; status terbaru belum mengganti data pengukuran itu.
+
 Acuan: tabel `Progress Cloud Agent.docx` (lampiran awal) dan `Dokumentasi.pdf`.
 Laporan ini membedakan bukti server saat ini, perubahan yang dikerjakan,
 dan pekerjaan yang belum terbukti. Tidak ada persentase perkiraan keseluruhan.
@@ -42,7 +49,7 @@ Tidak ada klaim 100% untuk keseluruhan proyek atau pencapaian SLA.
 | Face Recognition Cloud | Integrasi selesai | 100% | YuNet + FaceNet pada CUDA; empat foto enrollment dikenali, gambar kosong ditolak. Akurasi independen belum diukur. |
 | Migration Data Asli | Sebagian | 50% | JPEG nyata diproses, tetapi berasal dari gallery cloud, bukan capture baru dari edge. |
 | Return Hasil ke Edge | Sebagian | 50% | Kontrak respons dan korelasi task_id diuji melalui HTTP. Penerimaan/penggunaan respons oleh edge belum diuji ulang. |
-| Monitoring / Pengujian | Sebagian | 70% | Tujuh dari sepuluh butir terverifikasi: metrik, unit, fungsi/negatif, burst, sustained load, HPA, recovery. Dashboard, SLA, dan ketahanan lanjutan belum lengkap. |
+| Monitoring / Pengujian (snapshot 29 Okt 2026) | Sebagian | 70% | Snapshot historis mencatat 7/10 butir. Checklist terbaru dikonfirmasi selesai 10/10 (100%) pada 19 Nov 2026; metrik historis tetap seperti tercatat di bawah. |
 | End-to-End | Sebagian; jalur lengkap belum diverifikasi ulang | 50% | Cloud HTTP → GPU → DB → respons terbukti. Jalur Smart Box → scheduler → migration → cloud → relai belum diulang. |
 
 Sumber utama: [snapshot server/DB](evidence/cloud-final-state.json),
