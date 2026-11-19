@@ -137,14 +137,15 @@ Pengujian dilakukan dengan menyimulasikan beban 10 hingga 100 permintaan konkure
 |---|---|---|
 | Telemetri Cloud / Prometheus | Snapshot metrik mencatat model siap (`model_ready=1`), 66 request sukses, 1 unauthorized, dan 2 error. Histogram mencakup 69 request dengan total durasi 76,866 detik. | [Scrape metrik](../cloud_eval/evidence/CLOUD_20261029T045023_metrics.prom); snapshot 29 Oktober 2026. Angka ini mencampur smoke test dan burst, bukan hasil website JMeter. |
 | Beban Cloud API | Burst 10/50 konkuren mencatat 10/10 dan 50/50 respons sukses; P95 burst 50 adalah 2818,558 ms. Beban 50 worker mencatat 247 sukses dan HPA berubah 1 → 2 → 1; recovery pod teramati 8,102 detik. | [Laporan progress Cloud](CLOUD_AGENT_PROGRESS.md) dan [evidence cloud](../cloud_eval/evidence/README.md). Hasil ini historis dari host cloud. |
-| JMeter pada website (Eko) | Pengujian JMeter pada website dicatat selesai berdasarkan informasi pengguna. | Berkas `.jmx`, `.jtl`, log, dan ringkasan angka JMeter tidak ditemukan di repo; throughput, latency, jumlah pengguna, dan error rate belum dapat dicantumkan. Jurnal lama menyebut JMeter untuk endpoint dummy `/api/buka-loker`, yang berbeda dari website. |
+| JMeter website dan offload Edge → Cloud | Smoke website: halaman, proxy Scheduler, dan proxy GPU health HTTP 200; proxy telemetri Edge HTTP 504. Profil offload 10×5 menghasilkan 50/50 request Scheduler dan 50/50 HTTP Cloud; audit Cloud mencatat 49 `NO_FACE_DETECTED` dan 1 error aplikasi. Uji serial 1×5 lulus 5/5 ke Cloud. | Dilaksanakan dari Device Edge. Rincian, batas pengujian, test plan, dan JTL ada di [laporan JMeter](../../benchmarks/JMETER_EDGE_CLOUD_RESULTS_20261119.md). |
 | Benchmark Edge–Scheduler–Cloud | Perbandingan Edge-Only, Rule-Based, dan XGBoost pada beban 10–100 request; hasil utama ada pada tabel benchmark di atas. | [Data skenario](../../data/scenario_comparison.csv) dan [laporan benchmark](../../benchmarks/BENCHMARK_COMPARISON_XGB_VS_RULE.md). |
 | Unit test Cloud API | 10/10 unit test lulus, termasuk validasi input, readiness, metrik, audit, dan fallback SQLite. | [Output unit test](../cloud_eval/evidence/unit-tests.txt). |
 | Pengujian aplikasi web | Suite tersedia untuk tema, komponen dashboard, dan gateway API. | Perintah `npm test` di `smartbox_web_v2`; repositori tidak menyimpan output run terpisah. |
 
-Pengujian JMeter website dan hasil telemetri Cloud adalah jenis pengujian yang
-berbeda. Angka JMeter perlu diambil dari laporan Eko agar hasil website dapat
-ditampilkan tanpa mencampurkannya dengan metrik API Cloud.
+Pengujian website JMeter dan telemetri Cloud mengukur jalur berbeda. Uji ini
+memverifikasi cabang offload Scheduler → Cloud, tetapi menemukan proxy website
+untuk telemetri Edge masih 504. Payload netral membuktikan aliran request dan
+penanganan no-face, bukan keberhasilan pengenalan identitas.
 
 ---
 

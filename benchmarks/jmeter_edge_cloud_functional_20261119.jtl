@@ -1,0 +1,15 @@
+timeStamp,elapsed,label,responseCode,responseMessage,threadName,dataType,success,failureMessage,bytes,sentBytes,grpThreads,allThreads,URL,Latency,IdleTime,Connect
+1795107046556,144,Website home,200,OK,Website proxy smoke 1-1,text,true,,800,123,1,2,http://100.76.68.93:30080/,140,0,75
+1795107046703,59,Website Scheduler proxy,200,OK,Website proxy smoke 1-1,text,true,,523,136,1,2,http://100.76.68.93:30080/api/scheduler,58,0,0
+1795107046653,133,Edge Scheduler decision,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,312,305,1,2,http://100.75.230.102:8500/api/v1/schedule,133,0,52
+1795107046762,53,Website Cloud GPU proxy,200,OK,Website proxy smoke 1-1,text,true,,519,137,1,2,http://100.76.68.93:30080/api/gpu-health,53,0,0
+1795107047091,113,Cloud GPU face pipeline,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,255,2152,1,2,http://100.76.68.93:9000/api/v1/migration,113,0,56
+1795107047406,63,Edge Scheduler decision,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,312,305,1,2,http://100.75.230.102:8500/api/v1/schedule,63,0,0
+1795107047673,64,Cloud GPU face pipeline,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,255,2152,1,2,http://100.76.68.93:9000/api/v1/migration,64,0,0
+1795107047939,65,Edge Scheduler decision,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,313,305,1,2,http://100.75.230.102:8500/api/v1/schedule,65,0,0
+1795107048208,63,Cloud GPU face pipeline,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,255,2152,1,2,http://100.76.68.93:9000/api/v1/migration,63,0,0
+1795107048472,300,Edge Scheduler decision,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,313,305,1,2,http://100.75.230.102:8500/api/v1/schedule,300,0,0
+1795107048976,60,Cloud GPU face pipeline,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,255,2152,1,2,http://100.76.68.93:9000/api/v1/migration,60,0,0
+1795107049238,61,Edge Scheduler decision,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,312,305,1,2,http://100.75.230.102:8500/api/v1/schedule,61,0,0
+1795107049503,61,Cloud GPU face pipeline,200,OK,Edge Scheduler to Cloud inference 2-1,text,true,,255,2152,1,2,http://100.76.68.93:9000/api/v1/migration,61,0,0
+1795107046816,3056,Website Edge telemetry proxy,504,Gateway Time-out,Website proxy smoke 1-1,text,false,,329,136,1,1,http://100.76.68.93:30080/api/telemetry,3056,0,0
