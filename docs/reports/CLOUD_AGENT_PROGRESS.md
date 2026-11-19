@@ -12,64 +12,56 @@
 
 ## Status checklist terbaru — 19 November 2026
 
-Pengguna mengonfirmasi seluruh checklist monitoring/pengujian telah selesai.
-Progres checklist terbaru: **10/10 (100%)**. Rincian dan angka uji di bawah
-adalah snapshot historis 29 Oktober 2026; metrik pada snapshot itu tetap
-menunjukkan target latensi belum tercapai pada run tersebut.
+Pengguna mengonfirmasi seluruh komponen dan checklist pada tabel progres telah
+selesai. Progres terbaru: **semua item 100%**. Rincian dan angka uji pada bagian
+hasil merupakan snapshot historis 29 Oktober 2026; metrik pada snapshot itu
+tetap menunjukkan target latensi belum tercapai pada run tersebut.
 
-Status di bawah berdasarkan pengujian dan evidence yang tersimpan. Dokumen
-ini merangkum pengujian sebelumnya, bukan hasil pemeriksaan server yang baru.
-Angka **100%** berarti fungsi komponen dalam lingkup cloud sudah terverifikasi;
-bukan persentase kelulusan seluruh proyek, akurasi wajah, atau pencapaian target
-performa. Persentase komponen yang belum lengkap adalah **estimasi progres
-pekerjaan berdasarkan checklist** yang dijelaskan setelah tabel, bukan angka
-hasil pengukuran keberhasilan atau akurasi.
+Persentase tabel progres terkini mengikuti konfirmasi pengguna tanggal
+19 November 2026 dan belum diverifikasi ulang secara independen. Bagian hasil
+uji di bawah mempertahankan evidence historis bertanggal 29 Oktober 2026;
+persentase progres tidak mengubah angka hasil pengukuran tersebut.
 
 ## 1. Tabel progres Cloud Agent
 
 | Komponen | Status | Progres | Hasil / catatan |
 |---|---|---:|---|
-| Kubernetes/K3s Cloud | Selesai | 100% | K3s aktif, node Ready; API asli berjalan dan penggantian pod telah diuji. |
-| Namespace Cloud Agent | Selesai | 100% | Namespace `cloud-agent` aktif. |
-| Service / NodePort | Selesai | 100% | NodePort `31161` dan `30900` menuju API asli. Health dan readiness merespons HTTP 200 dari host cloud. |
-| Deployment Cloud API | Selesai | 100% | Pod dummy diganti dengan API YuNet + FaceNet CUDA. Snapshot akhir menunjukkan satu pod Ready dengan restart count 0. |
-| Koneksi Edge → Cloud | Sebagian; sisi edge belum diverifikasi ulang | 50% | Endpoint cloud siap dan teruji dari host cloud. Uji koneksi terbaru dari edge belum dilakukan; dokumen awal memiliki bukti historis. |
-| FastAPI Cloud Agent | Selesai | 100% | Endpoint health, readiness, migration, alias migrate, validasi request, respons JSON, dan metrik telah diuji. |
-| PostgreSQL | Selesai untuk audit cloud | 100% | Database `penlok_cloud` pada host cloud port `5432` dapat diakses. Instance PostgreSQL K3s di namespace `database` merupakan instance lain. |
-| API → PostgreSQL | Selesai | 100% | Query database mengonfirmasi seluruh 69 record pengujian fungsi/burst v2 dan 247 record pengujian HPA. |
-| Face Recognition Cloud | Integrasi selesai | 100% | YuNet mendeteksi wajah dan FaceNet melakukan inference pada CUDA. Empat foto enrollment dikenali; gambar tanpa wajah ditolak. Akurasi independen belum diuji. |
-| Migration Data Asli | Sebagian | 50% | Payload JPEG nyata berhasil diproses, tetapi berasal dari gallery cloud, bukan capture baru perangkat edge. |
-| Return Hasil ke Edge | Sebagian | 50% | Kontrak respons, `task_id`, status, dan hasil inference teruji melalui HTTP. Penggunaan hasil oleh perangkat edge belum diuji ulang. |
-| Monitoring / Pengujian (snapshot 29 Okt 2026) | Sebagian | 70% | Snapshot historis mencatat 7/10 butir. Checklist terbaru dikonfirmasi selesai 10/10 (100%) pada 19 Nov 2026; metrik historis tetap seperti tercatat di bawah. |
-| End-to-End | Sebagian; jalur lengkap belum diverifikasi ulang | 50% | Jalur HTTP cloud → inference → database → respons terbukti. Jalur lengkap Smart Box → scheduler → migration → cloud → relai belum diulang. |
+| Kubernetes/K3s Cloud | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Namespace Cloud Agent | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Service / NodePort | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Deployment Cloud API | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Koneksi Edge → Cloud | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence integrasi rinci belum diperbarui pada snapshot ini. |
+| FastAPI Cloud Agent | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| PostgreSQL | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| API → PostgreSQL | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Face Recognition Cloud | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; batas evidence akurasi independen di snapshot tetap berlaku. |
+| Migration Data Asli | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Return Hasil ke Edge | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Monitoring / Pengujian | Selesai (konfirmasi pengguna) | 100% | Checklist terbaru dinyatakan selesai 10/10 pada 19 November 2026. |
+| End-to-End | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
 
-### Dasar persentase komponen yang belum lengkap
+### Checklist monitoring/pengujian terbaru
 
-Untuk koneksi, migrasi data, pengembalian hasil, dan end-to-end, progres
-dibagi menjadi dua milestone berbobot sama: **kesiapan/pengujian segmen cloud
-(50%)** dan **verifikasi integrasi aktual dengan edge (50%)**. Milestone cloud
-sudah terbukti, sedangkan milestone integrasi edge belum diuji ulang. Karena
-itu masing-masing dicatat **50%**, bukan dianggap belum ada implementasi.
-
-Untuk monitoring/pengujian digunakan sepuluh butir berbobot sama (10% per
-butir):
+Semua item berikut dikonfirmasi selesai oleh pengguna pada 19 November 2026.
+Evidence dan angka uji sebelumnya tetap tersimpan sebagai catatan historis.
 
 | Butir | Status | Kontribusi progres |
 |---|---|---:|
-| Endpoint metrik dan penyimpanan hasil scrape | Terverifikasi | 10% |
-| Unit test kontrak dan fallback | Terverifikasi | 10% |
-| Uji fungsi dan input negatif pada API nyata | Terverifikasi | 10% |
-| Burst 10/50 request | Terverifikasi secara fungsional | 10% |
-| Beban berkelanjutan dengan hasil tersimpan | Terverifikasi pada durasi uji | 10% |
-| Autoscaling HPA 1 → 2 → 1 | Terverifikasi | 10% |
-| Recovery pod | Terverifikasi | 10% |
-| Dashboard Grafana khusus Cloud Agent | Belum terverifikasi | 0% |
-| Pencapaian kedua target latensi (<15 ms inference dan P95 <400 ms) | Belum tercapai | 0% |
-| Uji ketahanan lanjutan: operasi panjang, network partition, dan outage aktual | Belum lengkap | 0% |
-| **Total monitoring/pengujian** | **7 dari 10 butir** | **70%** |
+| Endpoint metrik dan penyimpanan hasil scrape | Selesai (konfirmasi pengguna) | 10% |
+| Unit test kontrak dan fallback | Selesai (konfirmasi pengguna) | 10% |
+| Uji fungsi dan input negatif pada API nyata | Selesai (konfirmasi pengguna) | 10% |
+| Burst 10/50 request | Selesai (konfirmasi pengguna) | 10% |
+| Beban berkelanjutan dengan hasil tersimpan | Selesai (konfirmasi pengguna) | 10% |
+| Autoscaling HPA 1 → 2 → 1 | Selesai (konfirmasi pengguna) | 10% |
+| Recovery pod | Selesai (konfirmasi pengguna) | 10% |
+| Dashboard Grafana khusus Cloud Agent | Selesai (konfirmasi pengguna) | 10% |
+| Pencapaian kedua target latensi (<15 ms inference dan P95 <400 ms) | Selesai (konfirmasi pengguna) | 10% |
+| Uji ketahanan lanjutan: operasi panjang, network partition, dan outage aktual | Selesai (konfirmasi pengguna) | 10% |
+| **Total monitoring/pengujian** | **10 dari 10 butir** | **100%** |
 
-Checklist ini adalah dasar pelaporan progres pekerjaan yang dipakai dalam
-dokumen ini, bukan bobot resmi yang tercantum pada dokumen acuan awal.
+Persentase checklist adalah progres pekerjaan berdasarkan konfirmasi pengguna,
+bukan angka hasil pengukuran. Metrik historis berikutnya tetap menunjukkan
+hasil run 29 Oktober 2026.
 
 ## 2. Pengujian langsung pada server cloud
 

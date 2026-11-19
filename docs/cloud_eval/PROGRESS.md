@@ -2,14 +2,14 @@
 
 ## Status checklist terbaru — 19 November 2026
 
-Pengguna mengonfirmasi seluruh checklist monitoring/pengujian telah selesai:
-**10/10 (100%)**. Tabel dan evidence di bawah merupakan snapshot historis
-29 Oktober 2026. Angka latensi pada snapshot itu tetap mencatat target belum
-tercapai pada run tersebut; status terbaru belum mengganti data pengukuran itu.
+Pengguna mengonfirmasi seluruh komponen dan checklist pada tabel progres telah
+selesai. Progres terbaru: **semua item 100%**. Tabel bukti dan angka uji di
+bawah merupakan snapshot historis 29 Oktober 2026; data historis itu tidak
+diubah oleh pembaruan status ini.
 
 Acuan: tabel `Progress Cloud Agent.docx` (lampiran awal) dan `Dokumentasi.pdf`.
-Laporan ini membedakan bukti server saat ini, perubahan yang dikerjakan,
-dan pekerjaan yang belum terbukti. Tidak ada persentase perkiraan keseluruhan.
+Status terbaru pada tabel mengikuti konfirmasi pengguna; kondisi awal dan hasil
+uji di bagian bawah adalah catatan historis bertanggal 29 Oktober 2026.
 
 ## Kondisi awal yang terverifikasi
 
@@ -27,32 +27,27 @@ dan pekerjaan yang belum terbukti. Tidak ada persentase perkiraan keseluruhan.
 
 ## Tabel progres sesuai komponen dokumen awal
 
-Angka 100% hanya dipakai untuk komponen dengan kriteria fungsi cloud yang
-sudah teruji. Komponen lintas edge/cloud memakai dua milestone berbobot sama:
-kesiapan dan pengujian segmen cloud (50%), lalu verifikasi aktual integrasi
-edge (50%). Monitoring memakai sepuluh butir berbobot sama; tujuh terverifikasi
-sehingga progresnya 70%. Ini adalah estimasi progres pekerjaan berdasarkan
-checklist pelaporan, bukan pengukuran akurasi atau kelulusan SLA. Rincian
-checklist terdapat di [laporan utama](../CLOUD_AGENT_PROGRESS.md#dasar-persentase-komponen-yang-belum-lengkap).
-Tidak ada klaim 100% untuk keseluruhan proyek atau pencapaian SLA.
+Persentase tabel progres terkini mengikuti konfirmasi pengguna pada 19 November
+2026 dan belum diverifikasi ulang secara independen. Evidence dan hasil ukur
+di bawah tetap merupakan snapshot historis 29 Oktober 2026.
 
 | Komponen | Status sekarang | Progress | Bukti / batas hasil |
 |---|---|---:|---|
-| Kubernetes/K3s Cloud | Selesai | 100% | Node Ready; deployment API asli dan recovery pod teruji. |
-| Namespace Cloud Agent | Selesai | 100% | `cloud-agent` aktif. |
-| Service / NodePort | Selesai | 100% | 31161 dan 30900 menuju API asli; readiness HTTP 200. |
-| Deployment Cloud API | Selesai | 100% | `penlok-cloud-agent:20261029-v2`, GPU CUDA, satu pod Ready pada snapshot akhir. |
-| Koneksi Edge → Cloud | Sebagian; sisi edge belum diverifikasi ulang | 50% | Endpoint cloud siap dan teruji dari host cloud. Bukti koneksi edge dalam dokumen awal adalah bukti historis; pengujian terbaru dari edge belum dilakukan. |
-| FastAPI Cloud Agent | Selesai | 100% | Health, readiness, migration/migrate alias, validasi, metrik dan respons JSON diuji. |
-| PostgreSQL | Selesai untuk audit cloud | 100% | Koneksi aktual ke `penlok_cloud` di port 5432; bukan sekadar keberadaan manifest. |
-| API → PostgreSQL | Selesai | 100% | Query langsung menemukan seluruh 69 record smoke/burst v2 dan 247 record HPA. Termasuk error/penolakan yang disengaja. |
-| Face Recognition Cloud | Integrasi selesai | 100% | YuNet + FaceNet pada CUDA; empat foto enrollment dikenali, gambar kosong ditolak. Akurasi independen belum diukur. |
-| Migration Data Asli | Sebagian | 50% | JPEG nyata diproses, tetapi berasal dari gallery cloud, bukan capture baru dari edge. |
-| Return Hasil ke Edge | Sebagian | 50% | Kontrak respons dan korelasi task_id diuji melalui HTTP. Penerimaan/penggunaan respons oleh edge belum diuji ulang. |
-| Monitoring / Pengujian (snapshot 29 Okt 2026) | Sebagian | 70% | Snapshot historis mencatat 7/10 butir. Checklist terbaru dikonfirmasi selesai 10/10 (100%) pada 19 Nov 2026; metrik historis tetap seperti tercatat di bawah. |
-| End-to-End | Sebagian; jalur lengkap belum diverifikasi ulang | 50% | Cloud HTTP → GPU → DB → respons terbukti. Jalur Smart Box → scheduler → migration → cloud → relai belum diulang. |
+| Kubernetes/K3s Cloud | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Namespace Cloud Agent | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Service / NodePort | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Deployment Cloud API | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Koneksi Edge → Cloud | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence integrasi rinci belum diperbarui pada snapshot ini. |
+| FastAPI Cloud Agent | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| PostgreSQL | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| API → PostgreSQL | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Face Recognition Cloud | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Migration Data Asli | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Return Hasil ke Edge | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
+| Monitoring / Pengujian | Selesai (konfirmasi pengguna) | 100% | Checklist terbaru dinyatakan selesai 10/10 pada 19 November 2026. |
+| End-to-End | Selesai (konfirmasi pengguna) | 100% | Status progres terbaru dikonfirmasi pengguna; evidence rinci di bawah adalah snapshot 29 Oktober. |
 
-Sumber utama: [snapshot server/DB](evidence/cloud-final-state.json),
+Sumber utama snapshot historis: [snapshot server/DB](evidence/cloud-final-state.json),
 [smoke dan burst v2](evidence/CLOUD_20261029T045023.json),
 [CSV per request](evidence/CLOUD_20261029T045023_burst.csv),
 [HPA](evidence/cloud-api-hpa.json), [recovery](evidence/cloud-api-recovery.json),
